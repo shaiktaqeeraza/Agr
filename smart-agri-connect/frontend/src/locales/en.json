@@ -1,0 +1,6 @@
+{
+  "appName": "Smart Agri Connect",
+  "nav": { "home": "Home", "browseCrops": "Browse Crops", "store": "Agri Store", "advisory": "Advisory", "chat": "Chat", "login": "Login", "register": "Register", "dashboard": "Dashboard", "logout": "Logout" },
+  "home": { "heroTitle": "Connecting Farmers Directly to Buyers", "heroSubtitle": "Sell your crops at fair prices, buy quality agri-inputs, and get expert farming advice — all in one place.", "sellCrop": "Sell Your Crop", "browseCrops": "Browse Crops", "whyUs": "Why Smart Agri Connect" },
+  "common": { "search": "Search", "price": "Price", "quantity": "Quantity", "location": "Location", "viewDetails": "View Details", "addToCart": "Add to Cart", "submit": "Submit", "cancel": "Cancel", "loading": "Loading..." }
+}
