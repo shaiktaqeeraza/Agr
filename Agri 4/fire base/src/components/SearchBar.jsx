@@ -12,4 +12,4 @@ export default function SearchBar({ value, onChange, placeholder = 'search the C
       />
     </div>
   )
-}
+};
