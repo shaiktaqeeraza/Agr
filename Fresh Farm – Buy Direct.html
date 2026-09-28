@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fresh Farm – Buy Direct</title>
+<style>
+:root{--bg:#fff8e7;--card:#fff;--tx:#23301f;--mu:#66735f;--ac:#25a244;--bd:#f0e3bd;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171d14;--card:#222b1e;--tx:#f1f5ec;--mu:#aab8a3;--bd:#34412f}}
+:root[data-theme="dark"]{--bg:#171d14;--card:#222b1e;--tx:#f1f5ec;--mu:#aab8a3;--bd:#34412f}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;font-size:18px;line-height:1.4;padding-bottom:110px}
+.w{max-width:900px;margin:0 auto;padding:0 16px}
+.hero{background:linear-gradient(135deg,#25a244,#7bc043);color:#fff;text-align:center;padding:30px 16px 34px;border-radius:0 0 28px 28px}
+.hero .big{font-size:3.2rem}
+h1{margin:6px 0;font-size:clamp(1.7rem,6vw,2.5rem)}
+.hero p{margin:4px 0 16px;font-size:1.15rem;opacity:.95}
+.call{display:inline-block;background:#fff;color:#1b7a34;padding:13px 24px;border-radius:99px;font-weight:700;text-decoration:none;font-size:1.1rem}
+.steps{display:flex;gap:10px;margin:22px 0}
+.steps div{flex:1;background:var(--card);border:2px solid var(--bd);border-radius:16px;padding:12px 6px;text-align:center;font-weight:600;font-size:.95rem}
+.steps span{display:block;font-size:1.8rem}
+h2{margin:22px 0 4px}
+.sub{color:var(--mu);margin:0 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.item{background:var(--card);border:3px solid var(--bd);border-radius:20px;padding:14px 8px;text-align:center}
+.item.on{border-color:var(--ac)}
+.item .e{font-size:3.4rem;line-height:1.1}
+.item b{display:block;font-size:1.15rem}
+.item .p{color:var(--ac);font-weight:700;margin:2px 0 10px;font-size:.95rem}
+.qty{display:flex;align-items:center;justify-content:center;gap:8px}
+.qty button{width:46px;height:46px;border-radius:50%;border:0;background:var(--ac);color:#fff;font-size:1.6rem;font-weight:700;cursor:pointer}
+.qty button.m{background:#e2e2e2;color:#333}
+.qty span{min-width:64px;font-weight:700;font-size:1.1rem}
+.add{width:100%;padding:12px;border:0;border-radius:12px;background:var(--ac);color:#fff;font-size:1.05rem;font-weight:700;cursor:pointer}
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+.why div{background:var(--card);border-radius:16px;padding:14px;border:2px solid var(--bd)}
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:3px solid var(--ac);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:10px;align-items:center;justify-content:space-between;z-index:9}
+.bar div{font-weight:600;min-width:0}
+.bar small{display:block;color:var(--mu);font-weight:400;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.send{background:#25d366;color:#fff;padding:14px 20px;border-radius:14px;font-weight:700;text-decoration:none;font-size:1.05rem;white-space:nowrap}
+.send.off{background:#b9b9b9;pointer-events:none}
+</style></head><body>
+<div class="hero">
+<div class="big">🌾🍅🍌</div>
+<h1>Fresh from our farm</h1>
+<p>Pick what you need. Tap Send. We reply with the price.</p>
+<a class="call" href="tel:+910000000000">📞 Call us</a>
+</div>
+<div class="w">
+<div class="steps"><div><span>👆</span>1. Pick</div><div><span>➕</span>2. How much</div><div><span>📲</span>3. Send</div></div>
+<h2>What do you want to buy?</h2>
+<p class="sub">Tap + to add. Each tap adds 50 kg.</p>
+<div class="grid" id="g"></div>
+<h2>Why buy from us?</h2>
+<div class="why"><div>✅ <b>Fresh</b><br>Picked and sent within 2 days</div><div>💰 <b>Fair price</b><br>Direct from farmer, no middleman</div><div>🚚 <b>We deliver</b><br>Tell us your place</div></div>
+</div>
+<div class="bar"><div id="t">Nothing chosen yet<small>Tap + on a fruit or crop</small></div><a class="send off" id="s" href="#">📲 Send order</a></div>
+<script>
+const NUM="910000000000"; // put your WhatsApp number here (country code + number)
+const P=[["Tomato","🍅"],["Onion","🧅"],["Potato","🥔"],["Rice","🌾"],["Wheat","🌿"],["Banana","🍌"],["Mango","🥭"],["Pomegranate","🍎"],["Grapes","🍇"]];
+const q={};P.forEach(x=>q[x[0]]=0);
+const g=document.getElementById("g");
+function draw(){
+g.innerHTML=P.map(([n,e])=>`<div class="item ${q[n]?'on':''}"><div class="e">${e}</div><b>${n}</b><div class="p">Ask today's price</div><div class="qty"><button class="m" data-n="${n}" data-d="-50">−</button><span>${q[n]} kg</span><button data-n="${n}" data-d="50">+</button></div></div>`).join("");
+const c=P.filter(x=>q[x[0]]),tot=c.reduce((a,x)=>a+q[x[0]],0);
+const s=document.getElementById("s"),t=document.getElementById("t");
+if(!c.length){t.innerHTML="Nothing chosen yet<small>Tap + on a fruit or crop</small>";s.className="send off";s.href="#";return}
+t.innerHTML=`${c.length} item(s) · ${tot} kg<small>${c.map(x=>x[1]+" "+q[x[0]]+"kg").join("  ")}</small>`;
+const msg="Hello! I want to buy:\n"+c.map(x=>"• "+x[0]+": "+q[x[0]]+" kg").join("\n")+"\nPlease tell me the price and delivery.";
+s.className="send";s.href="https://wa.me/"+NUM+"?text="+encodeURIComponent(msg);}
+g.onclick=e=>{const b=e.target.closest("button");if(!b)return;const n=b.dataset.n;q[n]=Math.max(0,q[n]+ +b.dataset.d);draw()};
+draw();
+</script></body></html>
