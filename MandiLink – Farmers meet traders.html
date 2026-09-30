@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MandiLink – Farmers meet traders</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f3f5ec;--card:#fff;--ink:#14291c;--mute:#5d6f62;--line:#d5dccb;--brand:#1f5d3a;--sun:#f0c53d;--onbrand:#fff}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1a13;--card:#16251b;--ink:#e9f1e3;--mute:#9bb0a0;--line:#2a3d30;--brand:#5fbf87;--sun:#f0c53d;--onbrand:#0f1a13}}
+:root[data-theme="dark"]{--bg:#0f1a13;--card:#16251b;--ink:#e9f1e3;--mute:#9bb0a0;--line:#2a3d30;--brand:#5fbf87;--sun:#f0c53d;--onbrand:#0f1a13}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 "Bricolage Grotesque",system-ui,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:0 18px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:18px 0}
+.logo{font-weight:800;font-size:1.4rem;letter-spacing:-.02em}
+.logo i{font-style:normal;background:var(--sun);color:#14291c;padding:0 7px;border-radius:6px;margin-right:4px}
+.seg{display:inline-flex;border:2px solid var(--brand);border-radius:99px;overflow:hidden}
+.seg button{border:0;background:none;color:var(--ink);font:inherit;font-weight:600;padding:8px 16px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--brand);color:var(--onbrand)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.hero{padding:26px 0 18px}
+h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.02;letter-spacing:-.03em;margin:0 0 10px;font-weight:800;max-width:14em}
+.hero p{color:var(--mute);margin:0;max-width:38em}
+.grid{display:grid;grid-template-columns:1fr;gap:22px;padding-bottom:40px}
+@media(min-width:860px){.grid{grid-template-columns:300px 1fr;align-items:start}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.panel h2{margin:0 0 12px;font-size:1.15rem}
+label{display:block;font-size:.85rem;font-weight:600;margin:10px 0 4px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 10px}
+.row{display:flex;gap:10px}.row>*{flex:1;min-width:0}
+.btn{background:var(--brand);color:var(--onbrand);border:0;border-radius:8px;font:inherit;font-weight:600;padding:10px 16px;cursor:pointer}
+.btn.alt{background:none;color:var(--ink);border:1px solid var(--line)}
+.btn.full{width:100%;margin-top:14px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.tools input{flex:2;min-width:160px}.tools select{flex:1;min-width:130px}
+.tabs{display:flex;gap:6px;margin-bottom:14px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:none;font:inherit;font-weight:600;color:var(--mute);padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent}
+.tabs button[aria-selected=true]{color:var(--ink);border-color:var(--sun)}
+.list{display:grid;gap:12px}
+.item{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--brand);border-radius:12px;padding:14px 16px;display:grid;gap:6px}
+.item.buy{border-left-color:var(--sun)}
+.item h3{margin:0;font-size:1.1rem;display:flex;justify-content:space-between;gap:10px}
+.price{color:var(--brand);font-weight:800;white-space:nowrap}
+.meta{color:var(--mute);font-size:.9rem}
+.tag{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:0 10px;font-size:.8rem;margin-right:6px}
+.empty{padding:28px;text-align:center;color:var(--mute);border:1px dashed var(--line);border-radius:12px}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);width:min(440px,92vw);padding:20px}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+.msg{border-top:1px solid var(--line);padding:10px 0;font-size:.92rem}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="logo"><i>M</i>MandiLink</div>
+  <div class="seg" role="group" aria-label="I am a">
+    <button id="rF" aria-pressed="true">I'm a farmer</button>
+    <button id="rT" aria-pressed="false">I'm a trader</button>
+  </div>
+</header>
+<section class="hero">
+  <h1>Sell straight from the field. Buy straight from the source.</h1>
+  <p id="stats">Farmers list what they grow. Traders post what they need. Make an offer and agree a price directly.</p>
+</section>
+<main class="grid">
+  <aside>
+    <div class="panel" id="formPanel">
+      <h2 id="formTitle"></h2>
+      <div id="formBox"></div>
+    </div>
+    <div class="panel" style="margin-top:16px">
+      <h2>Your inbox <span class="tag" id="inCount">0</span></h2>
+      <div id="inbox"></div>
+    </div>
+  </aside>
+  <section>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tP" aria-selected="true">Produce for sale</button>
+      <button role="tab" id="tB" aria-selected="false">Buy requests</button>
+    </div>
+    <div class="tools">
+      <input id="q" type="search" placeholder="Search crop or place" aria-label="Search">
+      <select id="cat" aria-label="Category"></select>
+      <select id="sort" aria-label="Sort"><option value="new">Newest</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option></select>
+    </div>
+    <div class="list" id="list"></div>
+  </section>
+</main>
+</div>
+
+<dialog id="dlg">
+  <h2 id="dT" style="margin-top:0"></h2>
+  <p class="meta" id="dS"></p>
+  <label for="dN">Your name</label><input id="dN">
+  <label for="dPh">Phone</label><input id="dPh" inputmode="tel">
+  <div class="row"><div><label for="dP">Your price (₹/kg)</label><input id="dP" type="number" min="0"></div>
+  <div><label for="dQ">Quantity (kg)</label><input id="dQ" type="number" min="0"></div></div>
+  <label for="dM">Message</label><textarea id="dM" rows="3"></textarea>
+  <div class="row" style="margin-top:14px"><button class="btn alt" id="dX">Cancel</button><button class="btn" id="dOk">Send offer</button></div>
+</dialog>
+<div id="toast" role="status"></div>
+
+<script>
+(function(){
+const CATS=["Vegetables","Fruits","Grains","Pulses","Spices","Dairy"];
+const KEY="mandilink.v1";
+const seed=[
+ {id:1,type:"sell",crop:"Tomato (hybrid)",cat:"Vegetables",qty:1200,price:18,place:"Kolar",name:"Ramesh Gowda",phone:"98450 11122",note:"Harvest ready this week, crates available.",t:5},
+ {id:2,type:"sell",crop:"Ragi",cat:"Grains",qty:3000,price:34,place:"Tumakuru",name:"Lakshmamma",phone:"98860 22233",note:"Cleaned, sun dried.",t:4},
+ {id:3,type:"sell",crop:"Robusta coffee cherry",cat:"Spices",qty:800,price:92,place:"Chikkamagaluru",name:"Suresh Hegde",phone:"99000 33344",note:"Shade grown, sorted.",t:3},
+ {id:4,type:"buy",crop:"Onion",cat:"Vegetables",qty:5000,price:22,place:"Bengaluru",name:"Anand Traders",phone:"80 4000 1234",note:"Need weekly supply, pickup from farm.",t:2},
+ {id:5,type:"buy",crop:"Banana (Nendran)",cat:"Fruits",qty:2000,price:28,place:"Mysuru",name:"Fresh Route Co.",phone:"97400 55566",note:"Green, uniform bunches.",t:1}
+];
+let S={role:"farmer",tab:"sell",items:seed,inbox:[],uid:100};
+try{const r=localStorage.getItem(KEY);if(r){const d=JSON.parse(r);if(d&&d.items)S=Object.assign(S,d)}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({items:S.items,inbox:S.inbox,uid:S.uid,role:S.role}))}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const toast=m=>{const t=$("toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),2200)};
+
+$("cat").innerHTML='<option value="">All categories</option>'+CATS.map(c=>`<option>${c}</option>`).join("");
+
+function renderForm(){
+  const f=S.role==="farmer";
+  $("rF").setAttribute("aria-pressed",f);$("rT").setAttribute("aria-pressed",!f);
+  $("formTitle").textContent=f?"List your produce":"Post what you want to buy";
+  $("formBox").innerHTML=`
+   <label for="fC">${f?"Crop":"Crop needed"}</label><input id="fC" placeholder="e.g. Tomato">
+   <label for="fK">Category</label><select id="fK">${CATS.map(c=>`<option>${c}</option>`).join("")}</select>
+   <div class="row"><div><label for="fQ">Quantity (kg)</label><input id="fQ" type="number" min="1"></div>
+   <div><label for="fP">${f?"Asking":"Offering"} ₹/kg</label><input id="fP" type="number" min="1"></div></div>
+   <label for="fL">Location</label><input id="fL" placeholder="Village / town">
+   <label for="fN">${f?"Your name":"Business name"}</label><input id="fN">
+   <label for="fH">Phone</label><input id="fH" inputmode="tel">
+   <label for="fT">Notes</label><textarea id="fT" rows="2"></textarea>
+   <button class="btn full" id="fGo">${f?"Publish listing":"Publish request"}</button>`;
+  $("fGo").onclick=addItem;
+  S.tab=f?S.tab:S.tab; 
+}
+function addItem(){
+  const v=id=>$(id).value.trim();
+  const crop=v("fC"),qty=+v("fQ"),price=+v("fP"),place=v("fL"),name=v("fN"),phone=v("fH");
+  if(!crop||!qty||!price||!place||!name||!phone){toast("Fill crop, quantity, price, location, name and phone");return}
+  S.items.unshift({id:++S.uid,type:S.role==="farmer"?"sell":"buy",crop,cat:v("fK"),qty,price,place,name,phone,note:v("fT"),t:Date.now()});
+  save();S.tab=S.role==="farmer"?"sell":"buy";toast("Published");renderForm();renderList();
+}
+function renderList(){
+  $("tP").setAttribute("aria-selected",S.tab==="sell");$("tB").setAttribute("aria-selected",S.tab==="buy");
+  const q=$("q").value.toLowerCase(),cat=$("cat").value,so=$("sort").value;
+  let L=S.items.filter(i=>i.type===S.tab&&(!cat||i.cat===cat)&&(!q||(i.crop+" "+i.place).toLowerCase().includes(q)));
+  L.sort((a,b)=>so==="lo"?a.price-b.price:so==="hi"?b.price-a.price:b.t-a.t);
+  const sell=S.tab==="sell";
+  $("list").innerHTML=L.length?L.map(i=>`
+   <article class="item ${sell?"":"buy"}">
+    <h3><span>${esc(i.crop)}</span><span class="price">₹${esc(i.price)}/kg</span></h3>
+    <div><span class="tag">${esc(i.cat)}</span><span class="tag">${Number(i.qty).toLocaleString("en-IN")} kg</span><span class="tag">${esc(i.place)}</span></div>
+    ${i.note?`<div>${esc(i.note)}</div>`:""}
+    <div class="meta">${esc(i.name)} · ${esc(i.phone)}</div>
+    <div><button class="btn" data-id="${i.id}">${sell?"Make an offer":"Offer to supply"}</button></div>
+   </article>`).join(""):`<div class="empty">Nothing matches yet. ${S.role==="farmer"?"List your produce":"Post a request"} from the form.</div>`;
+  $("list").querySelectorAll("button[data-id]").forEach(b=>b.onclick=()=>openDlg(+b.dataset.id));
+  const n=S.items.filter(i=>i.type==="sell").length,m=S.items.filter(i=>i.type==="buy").length;
+  $("stats").textContent=`${n} listings from farmers and ${m} requests from traders right now.`;
+}
+let cur=null;
+function openDlg(id){
+  cur=S.items.find(i=>i.id===id);if(!cur)return;
+  $("dT").textContent=cur.type==="sell"?"Offer for "+cur.crop:"Supply "+cur.crop;
+  $("dS").textContent=`${cur.name}, ${cur.place}. Listed at ₹${cur.price}/kg for ${cur.qty} kg.`;
+  $("dP").value=cur.price;$("dQ").value=cur.qty;$("dM").value="";
+  $("dlg").showModal();
+}
+$("dX").onclick=()=>$("dlg").close();
+$("dOk").onclick=()=>{
+  const name=$("dN").value.trim(),phone=$("dPh").value.trim(),p=+$("dP").value,q=+$("dQ").value;
+  if(!name||!phone||!p||!q){toast("Add your name, phone, price and quantity");return}
+  S.inbox.unshift({id:++S.uid,to:cur.name,crop:cur.crop,from:name,phone,p,q,m:$("dM").value.trim()});
+  save();$("dlg").close();toast("Offer sent to "+cur.name);renderInbox();
+};
+function renderInbox(){
+  $("inCount").textContent=S.inbox.length;
+  $("inbox").innerHTML=S.inbox.length?S.inbox.slice(0,6).map(x=>`
+   <div class="msg"><strong>${esc(x.from)}</strong> offered ₹${esc(x.p)}/kg for ${esc(x.q)} kg of ${esc(x.crop)}<br>
+   <span class="meta">To ${esc(x.to)} · ${esc(x.phone)}${x.m?" · "+esc(x.m):""}</span></div>`).join(""):`<div class="meta">Offers you send appear here.</div>`;
+}
+$("rF").onclick=()=>{S.role="farmer";S.tab="sell";save();renderForm();renderList()};
+$("rT").onclick=()=>{S.role="trader";S.tab="buy";save();renderForm();renderList()};
+$("tP").onclick=()=>{S.tab="sell";renderList()};
+$("tB").onclick=()=>{S.tab="buy";renderList()};
+["q","cat","sort"].forEach(id=>$(id).addEventListener("input",renderList));
+S.tab=S.role==="farmer"?"sell":"buy";
+renderForm();renderList();renderInbox();
+})();
+</script>
+</body>
+</html>
