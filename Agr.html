@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriHub | Smart farm management</title>
+  <style>
+    :root {
+      --green: #23734a;
+      --deep: #123b2a;
+      --mint: #e9f5eb;
+      --cream: #f7faf5;
+      --ink: #193126;
+      --muted: #718279;
+      --line: #dbe8dd;
+      --gold: #e8b84d;
+      --red: #c86652;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--cream); }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+    aside { padding: 28px 18px; color: #eef8ee; background: linear-gradient(160deg, #123b2a, #1e5b3c); }
+    .logo { display: flex; align-items: center; gap: 10px; padding: 0 10px 40px; font-size: 21px; font-weight: 800; letter-spacing: -.04em; }
+    .logo-mark { display: grid; place-items: center; width: 32px; height: 32px; color: var(--deep); background: var(--gold); border-radius: 12px 12px 12px 3px; transform: rotate(-8deg); }
+    .section-label { padding: 0 12px 10px; color: #9fc0a8; font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    nav { display: grid; gap: 6px; }
+    nav button { border: 0; border-radius: 10px; padding: 12px; color: #c4d9c8; background: transparent; text-align: left; font-weight: 700; }
+    nav button:hover, nav button.active { color: #fff; background: rgba(255,255,255,.14); }
+    .season { margin-top: auto; padding: 16px; border-radius: 13px; color: #c9e0cc; background: rgba(0,0,0,.17); font-size: 12px; line-height: 1.5; }
+    .season strong { display: block; margin-bottom: 5px; color: #fff; font-size: 14px; }
+    .progress { height: 6px; margin: 13px 0 7px; overflow: hidden; border-radius: 8px; background: #0d2c20; }
+    .progress span { display: block; width: 72%; height: 100%; border-radius: inherit; background: var(--gold); }
+    main { width: min(1450px, 100%); margin: auto; padding: 36px clamp(22px, 4vw, 58px) 55px; }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 35px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 7px; font-size: clamp(25px, 3vw, 37px); letter-spacing: -.06em; }
+    header p, .muted { margin-bottom: 0; color: var(--muted); font-size: 14px; }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .search { width: 220px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px; outline: 0; background: #fff; }
+    .search:focus { border-color: var(--green); box-shadow: 0 0 0 3px #d7eddb; }
+    .avatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--green); background: #d9edd9; font-size: 12px; font-weight: 800; }
+    .stats { display: grid; grid-template-columns: 1.35fr repeat(3, 1fr); gap: 14px; margin-bottom: 26px; }
+    .card { border: 1px solid var(--line); border-radius: 16px; background: #fff; box-shadow: 0 12px 30px rgba(31,73,46,.06); }
+    .welcome { min-height: 160px; padding: 25px; color: #fff; background: linear-gradient(135deg, #2e8254, #1f6744); position: relative; overflow: hidden; }
+    .welcome:after { content: ""; position: absolute; width: 180px; height: 180px; right: -40px; top: -80px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; }
+    .welcome h2 { max-width: 250px; margin-bottom: 16px; font-size: 24px; letter-spacing: -.05em; }
+    .welcome a { color: #fff; font-size: 13px; font-weight: 800; }
+    .stat { min-height: 160px; padding: 21px; }
+    .stat-title { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; font-weight: 700; }
+    .stat-value { display: block; margin: 24px 0 4px; font-size: 30px; letter-spacing: -.06em; }
+    .up { color: var(--green); font-size: 11px; font-weight: 800; }
+    .warning { color: var(--red); }
+    .columns { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(290px, .8fr); gap: 16px; }
+    .panel { padding: 22px; }
+    .panel-heading { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 18px; }
+    h3 { margin-bottom: 5px; font-size: 18px; letter-spacing: -.04em; }
+    .panel-heading p { margin-bottom: 0; color: var(--muted); font-size: 12px; }
+    .outline { border: 1px solid var(--line); border-radius: 8px; padding: 8px 11px; color: var(--green); background: #fff; font-size: 12px; font-weight: 800; }
+    .fields { display: grid; gap: 10px; }
+    .field { display: grid; grid-template-columns: 48px 1fr 105px 100px; gap: 14px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: 11px; transition: .2s; }
+    .field:hover { border-color: #a8c7ad; background: #fbfefb; transform: translateX(3px); }
+    .crop-image { width: 48px; height: 48px; border-radius: 9px; background: linear-gradient(135deg, #b7d878, #4f965a); }
+    .crop-image.wheat { background: linear-gradient(135deg, #f2d77b, #bd803e); }
+    .crop-image.rice { background: linear-gradient(135deg, #a1d8c6, #438e7a); }
+    .field strong { font-size: 13px; }
+    .field small { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .health { color: var(--muted); font-size: 11px; }
+    .dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--green); }
+    .dot.watch { background: var(--gold); }
+    .yield { text-align: right; font-size: 12px; font-weight: 800; }
+    .yield small { text-align: right; }
+    .tasks { display: grid; gap: 0; }
+    .task { display: flex; gap: 11px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+    .task:last-child { border-bottom: 0; }
+    .check { width: 18px; height: 18px; margin-top: 1px; border: 1px solid #aac3ad; border-radius: 5px; background: #fff; flex: none; }
+    .task.done .check { color: #fff; border-color: var(--green); background: var(--green); }
+    .task.done .task-name { color: var(--muted); text-decoration: line-through; }
+    .task-name { font-size: 13px; font-weight: 700; }
+    .task small { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
+    .weather { margin-top: 16px; background: #e7f3f2; }
+    .weather-main { display: flex; justify-content: space-between; align-items: center; }
+    .temperature { font-size: 42px; font-weight: 800; letter-spacing: -.08em; }
+    .sun { font-size: 40px; }
+    .weather-stats { display: flex; gap: 24px; padding-top: 14px; border-top: 1px solid rgba(53,111,105,.16); color: #547571; font-size: 11px; }
+    .weather-stats strong { display: block; margin-top: 3px; color: var(--ink); }
+    @media (max-width: 1050px) { .stats { grid-template-columns: repeat(3, 1fr); } .welcome { grid-column: 1 / -1; } }
+    @media (max-width: 800px) { .layout { display: block; } aside { padding: 17px; } .logo { padding-bottom: 17px; } .section-label, .season { display: none; } nav { display: flex; overflow-x: auto; } nav button { white-space: nowrap; } main { padding: 25px 18px 40px; } .columns { grid-template-columns: 1fr; } }
+    @media (max-width: 560px) { header { align-items: flex-start; flex-direction: column; } .search { width: 100%; } .header-actions { width: 100%; } .stats { grid-template-columns: 1fr 1fr; } .welcome { grid-column: 1 / -1; } .field { grid-template-columns: 42px 1fr auto; gap: 10px; } .crop-image { width: 42px; height: 42px; } .health { grid-column: 2; } .yield { grid-column: 3; grid-row: 1 / span 2; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside>
+      <div class="logo"><span class="logo-mark">⌁</span>AgriHub</div>
+      <div class="section-label">Farm workspace</div>
+      <nav>
+        <button class="active">◈ &nbsp;Dashboard</button>
+        <button>▦ &nbsp;My fields</button>
+        <button>◷ &nbsp;Farm schedule</button>
+        <button>↗ &nbsp;Market insights</button>
+        <button>⚙ &nbsp;Settings</button>
+      </nav>
+      <div class="season"><strong>2026 Kharif season</strong>Crop cycle is on track. Harvest preparation begins next month.<div class="progress"><span></span></div>72% complete</div>
+    </aside>
+    <main>
+      <header>
+        <div><h1>Good morning, Arjun</h1><p>Tuesday, October 7, 2026 · Green Valley Farm</p></div>
+        <div class="header-actions"><input class="search" type="search" placeholder="Search crops or fields" aria-label="Search crops or fields"><div class="avatar">AK</div></div>
+      </header>
+      <section class="stats" aria-label="Farm summary">
+        <article class="card welcome"><div style="font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#c4e6c9">Farm snapshot</div><h2>Better data. Healthier crops.</h2><a href="#fields">Review field health →</a></article>
+        <article class="card stat"><div class="stat-title"><span>Active fields</span><span>▤</span></div><strong class="stat-value">18</strong><span class="up">+3 this season</span></article>
+        <article class="card stat"><div class="stat-title"><span>Expected harvest</span><span>↗</span></div><strong class="stat-value">126.4 t</strong><span class="up">11% above forecast</span></article>
+        <article class="card stat"><div class="stat-title"><span>Tasks due</span><span>!</span></div><strong class="stat-value">09</strong><span class="up warning">3 need attention</span></article>
+      </section>
+      <div class="columns">
+        <section class="card panel" id="fields">
+          <div class="panel-heading"><div><h3>Crop and field health</h3><p>Monitor every growing area at a glance</p></div><button class="outline">+ Add field</button></div>
+          <div class="fields">
+            <article class="field"><div class="crop-image"></div><div><strong>North Meadow</strong><small>Maize · 24.5 acres</small></div><div class="health"><span class="dot"></span>Healthy</div><div class="yield">31.2 t<small>forecast</small></div></article>
+            <article class="field"><div class="crop-image wheat"></div><div><strong>West Ridge</strong><small>Wheat · 31 acres</small></div><div class="health"><span class="dot watch"></span>Watch</div><div class="yield">28.8 t<small>forecast</small></div></article>
+            <article class="field"><div class="crop-image rice"></div><div><strong>Canal Block 04</strong><small>Rice · 18.2 acres</small></div><div class="health"><span class="dot"></span>Healthy</div><div class="yield">24.6 t<small>forecast</small></div></article>
+            <article class="field"><div class="crop-image"></div><div><strong>South Flats</strong><small>Maize · 27.1 acres</small></div><div class="health"><span class="dot"></span>Healthy</div><div class="yield">35.4 t<small>forecast</small></div></article>
+          </div>
+        </section>
+        <div>
+          <section class="card panel"><div class="panel-heading"><div><h3>Today's tasks</h3><p>Keep your farm moving</p></div><span class="up">9 total</span></div><div class="tasks">
+            <div class="task"><button class="check" aria-label="Complete irrigation check"></button><div><div class="task-name">Check irrigation lines</div><small>North Meadow · Due 10:30 AM</small></div></div>
+            <div class="task done"><button class="check" aria-label="Completed soil sensor check">✓</button><div><div class="task-name">Calibrate soil sensor</div><small>Canal Block 04 · Completed</small></div></div>
+            <div class="task"><button class="check" aria-label="Complete pest inspection"></button><div><div class="task-name">Inspect wheat for pests</div><small>West Ridge · Due 2:00 PM</small></div></div>
+          </div></section>
+          <section class="card panel weather"><div class="panel-heading"><div><h3>Field conditions</h3><p>Green Valley, Punjab</p></div><span class="muted" style="font-size:11px">Updated 8:42 AM</span></div><div class="weather-main"><div><div class="temperature">29°</div><span class="muted">Feels like 31° · Partly cloudy</span></div><div class="sun">🌤</div></div><div class="weather-stats"><span>Humidity<strong>62%</strong></span><span>Wind<strong>12 km/h</strong></span><span>Rain<strong>10%</strong></span></div></section>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script>
+    document.querySelectorAll('nav button').forEach(button => button.addEventListener('click', () => {
+      document.querySelectorAll('nav button').forEach(item => item.classList.remove('active'));
+      button.classList.add('active');
+    }));
+    document.querySelectorAll('.check').forEach(button => button.addEventListener('click', () => {
+      const task = button.closest('.task');
+      task.classList.toggle('done');
+      button.textContent = task.classList.contains('done') ? '✓' : '';
+    }));
+  </script>
+</body>
+</html>
