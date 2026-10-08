@@ -1,0 +1,28 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TradeLink</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2"></script><script src="app.js"></script></head><body><nav id="nav"></nav><main>
+<h1>Post a listing</h1><p class="sub">Tell other traders what you want to buy or sell.</p>
+<form id="f">
+ <label>Type<select id="type"><option value="sell">I'm selling</option><option value="buy">I'm buying</option></select></label>
+ <label>Title<input id="title" required maxlength="120"></label>
+ <label>Category<input id="category" required></label>
+ <label>Price in ₹ (per unit or total)<input id="price" type="number" min="0" required></label>
+ <label>City<input id="city" required></label>
+ <label>Details<textarea id="description" maxlength="1000"></textarea></label>
+ <div class="err" id="err"></div>
+ <button>Publish listing</button>
+</form>
+<script>
+let me;
+(async()=>{ me=await requireUser(); if(me) renderNav(); })();
+document.getElementById('f').onsubmit=async e=>{
+  e.preventDefault();
+  const v=id=>document.getElementById(id).value.trim();
+  try{
+    await db.createDocument(DB_ID,'listings',ID.unique(),{
+      ownerId:me.$id,ownerName:me.name,type:v('type'),title:v('title'),category:v('category'),
+      price:Number(v('price')),city:v('city'),description:v('description')},
+      [Permission.read(Role.any()),Permission.update(Role.user(me.$id)),Permission.delete(Role.user(me.$id))]);
+    location.href='index.html';
+  }catch(x){document.getElementById('err').textContent=x.message;}
+};
+</script>
+</main></body></html>

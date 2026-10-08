@@ -1,0 +1,29 @@
+:root{--bg:#f2f4f3;--ink:#14231f;--muted:#5d6b66;--line:#d3dad7;--accent:#0f6b5c;--gold:#b87d0b;--card:#fff}
+*{box-sizing:border-box}
+body{margin:0;font-family:'IBM Plex Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+nav{display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;background:var(--ink)}
+nav a{color:#fff;text-decoration:none;margin-left:18px}
+nav .brand{font-weight:700;font-size:1.25rem;margin:0}
+main{max-width:900px;margin:0 auto;padding:28px 5vw 60px}
+h1{font-size:1.9rem;margin:0 0 6px}
+p.sub{color:var(--muted);margin:0 0 22px}
+input,select,textarea,button{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:#fff;width:100%}
+textarea{min-height:90px}
+button,.btn{background:var(--accent);color:#fff;border:0;cursor:pointer;width:auto;padding:10px 18px;border-radius:6px;text-decoration:none;display:inline-block}
+button.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+button.danger{background:#a33}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:3px solid #7cc4b6;outline-offset:2px}
+form{display:grid;gap:12px;max-width:480px}
+label{font-weight:600;font-size:.9rem}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);padding:16px;margin-bottom:12px;border-radius:6px}
+.card.buy{border-left-color:var(--gold)}
+.card h3{margin:0 0 4px}
+.tag{font-size:.8rem;font-weight:600;color:var(--accent)}
+.card.buy .tag{color:var(--gold)}
+.meta{color:var(--muted);font-size:.9rem;margin:4px 0 10px}
+.badge{background:var(--accent);color:#fff;font-size:.72rem;padding:2px 7px;border-radius:10px;margin-left:6px}
+.msg{padding:10px 14px;margin-bottom:8px;border-radius:6px;background:#fff;border:1px solid var(--line)}
+.msg.me{background:#e1f1ed;margin-left:12%}
+.err{color:#a33;min-height:1.2em}
+@media(max-width:640px){.filters{grid-template-columns:1fr}}

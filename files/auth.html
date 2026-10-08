@@ -1,0 +1,43 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TradeLink</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2"></script><script src="app.js"></script></head><body><nav id="nav"></nav><main>
+<h1>Join TradeLink</h1><p class="sub">Create an account or log in.</p>
+<form id="f">
+ <div id="extra">
+  <label>Your name<input id="name"></label>
+  <label>Business name<input id="business"></label>
+  <label>City<input id="city"></label>
+  <label>What do you trade?<input id="trade" placeholder="e.g. spices, electronics"></label>
+ </div>
+ <label>Email<input id="email" type="email" required></label>
+ <label>Password (8+ characters)<input id="pass" type="password" minlength="8" required></label>
+ <div class="err" id="err"></div>
+ <button id="go">Create account</button>
+ <button type="button" class="ghost" id="sw">I already have an account</button>
+</form>
+<script>
+let signup=true;
+renderNav();
+document.getElementById('sw').onclick=()=>{
+  signup=!signup;
+  document.getElementById('extra').style.display=signup?'block':'none';
+  document.getElementById('go').textContent=signup?'Create account':'Log in';
+  document.getElementById('sw').textContent=signup?'I already have an account':'I need an account';
+};
+document.getElementById('f').onsubmit=async e=>{
+  e.preventDefault();
+  const v=id=>document.getElementById(id).value.trim(), err=document.getElementById('err');
+  err.textContent='';
+  try{
+    if(signup){
+      const u=await account.create(ID.unique(),v('email'),v('pass'),v('name'));
+      await account.createEmailPasswordSession(v('email'),v('pass'));
+      await db.createDocument(DB_ID,'profiles',u.$id,
+        {name:v('name'),business:v('business'),city:v('city'),trade:v('trade')},
+        [Permission.read(Role.users()),Permission.update(Role.user(u.$id)),Permission.delete(Role.user(u.$id))]);
+    } else {
+      await account.createEmailPasswordSession(v('email'),v('pass'));
+    }
+    location.href='index.html';
+  }catch(x){err.textContent=x.message;}
+};
+</script>
+</main></body></html>

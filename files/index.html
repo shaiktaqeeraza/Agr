@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TradeLink</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><script src="https://cdn.jsdelivr.net/npm/appwrite@16.0.2"></script><script src="app.js"></script></head><body><nav id="nav"></nav><main>
+<h1>Trade board</h1><p class="sub">Browse what traders want to buy and sell. Log in to contact them.</p>
+<div class="filters">
+ <input id="q" placeholder="Search item or city" aria-label="Search">
+ <select id="type" aria-label="Type"><option value="">Buy and sell</option><option value="sell">Selling</option><option value="buy">Buying</option></select>
+ <input id="cat" placeholder="Category" aria-label="Category">
+ <input id="city" placeholder="City" aria-label="City">
+</div>
+<div id="list">Loading…</div>
+<script>
+let all=[],verified=new Set(),me=null;
+async function init(){
+  me=await renderNav(); verified=await getVerifiedIds();
+  const r=await db.listDocuments(DB_ID,'listings',[Query.orderDesc('$createdAt'),Query.limit(100)]);
+  all=r.documents; draw();
+  ['q','type','cat','city'].forEach(i=>document.getElementById(i).addEventListener('input',draw));
+}
+function draw(){
+  const q=document.getElementById('q').value.toLowerCase(),t=document.getElementById('type').value,
+        c=document.getElementById('cat').value.toLowerCase(),ci=document.getElementById('city').value.toLowerCase();
+  const rows=all.filter(l=>(!t||l.type===t)&&(!c||(l.category||'').toLowerCase().includes(c))&&(!ci||(l.city||'').toLowerCase().includes(ci))
+    &&(!q||(l.title+' '+l.description+' '+l.city).toLowerCase().includes(q)));
+  document.getElementById('list').innerHTML=rows.length?rows.map(l=>`
+   <div class="card ${l.type}"><span class="tag">${l.type==='sell'?'Selling':'Buying'}</span>
+   <h3>${esc(l.title)}</h3>
+   <div class="meta">${esc(l.category)} · ${esc(l.city)} · ₹${esc(l.price)} · ${esc(l.ownerName)}${verified.has(l.ownerId)?'<span class="badge">Verified</span>':''}</div>
+   <p>${esc(l.description)}</p>
+   ${me&&me.$id===l.ownerId?'':`<a class="btn" href="messages.html?to=${l.ownerId}&name=${encodeURIComponent(l.ownerName)}">Contact trader</a>`}
+   </div>`).join(''):'<p>No listings match. Try different filters or post the first one.</p>';
+}
+init();
+</script>
+</main></body></html>
