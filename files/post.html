@@ -10,9 +10,11 @@
  <div class="err" id="err"></div>
  <button>Publish listing</button>
 </form>
+<h2 style="margin-top:36px">All listings</h2>
+<div id="all">Loading…</div>
 <script>
 let me;
-(async()=>{ me=await requireUser(); if(me) renderNav(); })();
+(async()=>{ me=await requireUser(); if(me){ renderNav(); loadAll(); } })();
 document.getElementById('f').onsubmit=async e=>{
   e.preventDefault();
   const v=id=>document.getElementById(id).value.trim();
@@ -25,4 +27,14 @@ document.getElementById('f').onsubmit=async e=>{
   }catch(x){document.getElementById('err').textContent=x.message;}
 };
 </script>
+async function loadAll(){
+  const r=await db.listDocuments(DB_ID,'listings',[Query.orderDesc('$createdAt'),Query.limit(100)]);
+  document.getElementById('all').innerHTML=r.documents.length?r.documents.map(l=>`
+   <div class="card ${l.type}"><span class="tag">${l.type==='sell'?'Selling':'Buying'}</span>
+   <h3>${esc(l.title)}</h3>
+   <div class="meta">${esc(l.category)} · ${esc(l.city)} · ₹${esc(l.price)} · ${me&&l.ownerId===me.$id?'You':esc(l.ownerName)}</div>
+   <p>${esc(l.description)}</p>
+   ${me&&l.ownerId===me.$id?'':`<a class="btn" href="messages.html?to=${l.ownerId}&name=${encodeURIComponent(l.ownerName)}">Contact trader</a>`}
+   </div>`).join(''):'<p>No listings yet.</p>';
+}
 </main></body></html>

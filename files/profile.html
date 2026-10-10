@@ -14,7 +14,10 @@
 let me;
 (async()=>{
   me=await requireUser(); if(!me) return; renderNav();
-  const p=await db.getDocument(DB_ID,'profiles',me.$id);
+  let p;
+  try{ p=await db.getDocument(DB_ID,'profiles',me.$id); }
+  catch{ p=await db.createDocument(DB_ID,'profiles',me.$id,{name:me.name},
+    [Permission.read(Role.users()),Permission.update(Role.user(me.$id)),Permission.delete(Role.user(me.$id))]); }
   ['name','business','city','trade'].forEach(k=>document.getElementById(k).value=p[k]||'');
   if((await getVerifiedIds()).has(me.$id)) document.getElementById('vb').innerHTML='<span class="badge">Verified</span>';
   loadMine();
@@ -26,7 +29,8 @@ document.getElementById('f').onsubmit=async e=>{
   catch(x){ err.style.color='#a33'; err.textContent=x.message; }
 };
 async function loadMine(){
-  const r=await db.listDocuments(DB_ID,'listings',[Query.equal('ownerId',me.$id),Query.orderDesc('$createdAt')]);
+  const all=await db.listDocuments(DB_ID,'listings',[Query.orderDesc('$createdAt'),Query.limit(100)]);
+  const r={documents:all.documents.filter(l=>l.ownerId===me.$id)};
   document.getElementById('mine').innerHTML=r.documents.length?r.documents.map(l=>`
    <div class="card ${l.type}"><h3>${esc(l.title)}</h3><div class="meta">${esc(l.category)} · ${esc(l.city)} · ₹${esc(l.price)}</div>
    <button class="danger" onclick="del('${l.$id}')">Delete listing</button></div>`).join(''):'<p>You have no listings yet. <a href="post.html">Post one</a>.</p>';

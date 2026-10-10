@@ -27,6 +27,7 @@ document.getElementById('f').onsubmit=async e=>{
   const v=id=>document.getElementById(id).value.trim(), err=document.getElementById('err');
   err.textContent='';
   try{
+    try{ await account.deleteSession('current'); }catch{}
     if(signup){
       const u=await account.create(ID.unique(),v('email'),v('pass'),v('name'));
       await account.createEmailPasswordSession(v('email'),v('pass'));
