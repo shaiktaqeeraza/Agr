@@ -163,6 +163,284 @@
     .weather-stats { display: flex; gap: 22px; border-top: 1px solid rgba(67,121,118,.17); margin-top: 17px; padding-top: 13px; color: #547271; font-size: 11px; }
     .weather-stats strong { display: block; color: var(--ink); font-size: 12px; margin-top: 2px; }
     .empty { display: none; color: var(--muted); padding: 28px 0; text-align: center; font-size: 13px; }
+    
+    /* Interactive Field Map Styles */
+    #field-map-container { display: none; margin-top: 4px; }
+    .map-header-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed rgba(166,172,166,0.6);
+    }
+    .map-modes {
+      display: flex;
+      gap: 4px;
+      background: var(--canvas);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1px solid rgba(166,172,166,0.3);
+    }
+    .map-mode-btn {
+      border: 0;
+      background: transparent;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 11px;
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .map-mode-btn:hover { color: var(--ink); }
+    .map-mode-btn.active {
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: 0 2px 6px rgba(0,0,0,.07);
+    }
+    .map-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--leaf);
+      background: var(--leaf-soft);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+    .map-status-pill .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--leaf);
+      border-radius: 50%;
+      box-shadow: 0 0 0 0 rgba(62,118,82,0.7);
+      animation: pulse-ring 2s infinite;
+    }
+    @keyframes pulse-ring {
+      0% { box-shadow: 0 0 0 0 rgba(62,118,82,0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(62,118,82,0); }
+      100% { box-shadow: 0 0 0 0 rgba(62,118,82,0); }
+    }
+    .map-canvas-wrapper {
+      position: relative;
+      background: #eef3eb;
+      border-radius: 14px;
+      border: 1px solid rgba(166,172,166,0.55);
+      overflow: hidden;
+      box-shadow: inset 0 2px 10px rgba(24,51,40,0.04);
+    }
+    .farm-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      user-select: none;
+    }
+    .parcel {
+      cursor: pointer;
+      transition: fill .3s ease, stroke .2s ease, filter .2s ease, stroke-width .2s ease;
+    }
+    .parcel:hover {
+      filter: brightness(1.05);
+      stroke: #2b593b !important;
+      stroke-width: 2.5px !important;
+    }
+    .parcel.selected {
+      stroke: #163625 !important;
+      stroke-width: 3.2px !important;
+      filter: drop-shadow(0 6px 14px rgba(24,51,40,.24));
+    }
+    .sensor-pin {
+      cursor: pointer;
+      transition: transform .2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .sensor-pin:hover {
+      transform: scale(1.15);
+    }
+    .ping-circle {
+      animation: sensor-radar 2.4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      transform-origin: center;
+    }
+    .ping-circle.warn {
+      animation: sensor-radar-warn 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+    @keyframes sensor-radar {
+      0% { r: 6; opacity: 0.85; stroke-width: 2; }
+      100% { r: 24; opacity: 0; stroke-width: 0.5; }
+    }
+    @keyframes sensor-radar-warn {
+      0% { r: 6; opacity: 0.9; stroke-width: 2; }
+      100% { r: 24; opacity: 0; stroke-width: 0.5; }
+    }
+    .telemetry-card {
+      margin-top: 14px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 14px rgba(39,62,42,.05);
+      transition: all .25s ease;
+    }
+    .telemetry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 13px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .telemetry-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .telemetry-meta {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .telemetry-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .telemetry-badge.healthy {
+      background: var(--leaf-soft);
+      color: var(--leaf);
+    }
+    .telemetry-badge.attention {
+      background: #fdf2d6;
+      color: #9f6608;
+    }
+    .telemetry-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 700px) {
+      .telemetry-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .telemetry-item {
+      background: var(--canvas);
+      padding: 10px 12px;
+      border-radius: 9px;
+      border: 1px solid rgba(166,172,166,0.35);
+    }
+    .telemetry-item .label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--muted);
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .telemetry-item .val {
+      font-size: 17px;
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      margin: 5px 0 3px;
+      color: var(--ink);
+      letter-spacing: -.03em;
+    }
+    .telemetry-item .bar {
+      height: 4px;
+      background: #d7ded3;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 6px 0 4px;
+    }
+    .telemetry-item .bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: var(--leaf);
+      transition: width .4s ease, background-color .4s ease;
+    }
+    .telemetry-item .sub {
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .telemetry-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid rgba(166,172,166,0.3);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .irrigation-control-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: linear-gradient(180deg, #3e7652, #326243);
+      color: #fff;
+      border: 0;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s ease;
+    }
+    .irrigation-control-btn:hover {
+      background: #285536;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(62,118,82,0.22);
+    }
+    .irrigation-control-btn.active {
+      background: linear-gradient(180deg, #257896, #1c5b73);
+      box-shadow: 0 4px 12px rgba(37,120,150,0.25);
+    }
+    .map-legend {
+      display: flex;
+      gap: 14px;
+      font-size: 11px;
+      color: var(--muted);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .legend-color {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+    .field-row { cursor: pointer; }
+    .field-row:hover .field-name { color: var(--leaf); }
+    .field-sensor-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      background: var(--canvas);
+      color: var(--muted);
+    }
+    .field-sensor-tag.moist-warn {
+      background: #fff3db;
+      color: #9f6608;
+    }
     @media (max-width: 1060px) { .overview { grid-template-columns: repeat(3, 1fr); } .hero-card { grid-column: 1 / -1; } }
     @media (max-width: 820px) { .shell { display: block; } aside { padding: 16px; } .brand { padding: 0 8px 15px; } .nav-label, .season-card { display: none; } nav { display: flex; overflow-x: auto; } .nav-item { white-space: nowrap; } main { padding: 25px 18px 38px; } .content-grid { grid-template-columns: 1fr; } }
     @media (max-width: 560px) { .topbar { align-items: flex-start; } .top-actions .user-button { font-size: 0; padding-right: 6px; } .overview { grid-template-columns: 1fr 1fr; } .hero-card { grid-column: 1 / -1; } .field-row { grid-template-columns: 42px 1fr auto; gap: 10px; } .field-thumb { width: 42px; height: 42px; } .health { grid-column: 2; } .field-yield { grid-column: 3; grid-row: 1 / span 2; } }
@@ -205,14 +483,310 @@
 
       <div class="content-grid">
         <section class="panel" id="fields">
-          <div class="panel-head"><div><h3>Field health</h3><p class="panel-subtitle">Live view of your growing areas</p></div><div class="view-toggle"><button class="active" data-view="list">List</button><button data-view="map">Map</button></div></div>
-          <div class="field-list" id="field-list">
-            <article class="field-row" data-field="corn"><div class="field-thumb"></div><div><div class="field-name">North Meadow</div><div class="field-meta">Corn · 24.5 acres</div></div><div class="health"><span class="health-dot"></span>Healthy</div><div class="field-yield">18.2 t<span>forecast yield</span></div></article>
-            <article class="field-row" data-field="wheat"><div class="field-thumb wheat"></div><div><div class="field-name">West Ridge</div><div class="field-meta">Winter wheat · 31 acres</div></div><div class="health"><span class="health-dot attention"></span>Watch</div><div class="field-yield">22.8 t<span>forecast yield</span></div></article>
-            <article class="field-row" data-field="rice"><div class="field-thumb rice"></div><div><div class="field-name">Creekside 04</div><div class="field-meta">Rice · 18.2 acres</div></div><div class="health"><span class="health-dot"></span>Healthy</div><div class="field-yield">14.6 t<span>forecast yield</span></div></article>
-            <article class="field-row" data-field="corn"><div class="field-thumb"></div><div><div class="field-name">South Flats</div><div class="field-meta">Corn · 27.1 acres</div></div><div class="health"><span class="health-dot"></span>Healthy</div><div class="field-yield">19.4 t<span>forecast yield</span></div></article>
+          <div class="panel-head">
+            <div>
+              <h3>Field health</h3>
+              <p class="panel-subtitle">Live view of your growing areas</p>
+            </div>
+            <div class="view-toggle">
+              <button class="active" data-view="list">List</button>
+              <button data-view="map">Map</button>
+            </div>
           </div>
-          <p class="empty" id="map-message">Field map view is ready for your next scouting walk.</p>
+
+          <!-- List View -->
+          <div class="field-list" id="field-list">
+            <article class="field-row" data-field-id="north-meadow" data-field="corn">
+              <div class="field-thumb"></div>
+              <div>
+                <div class="field-name">North Meadow <span class="field-sensor-tag">💧 42% Moist</span></div>
+                <div class="field-meta">Corn · 24.5 acres · Sensor SN-102</div>
+              </div>
+              <div class="health"><span class="health-dot"></span>Healthy</div>
+              <div class="field-yield">18.2 t<span>forecast yield</span></div>
+            </article>
+
+            <article class="field-row" data-field-id="west-ridge" data-field="wheat">
+              <div class="field-thumb wheat"></div>
+              <div>
+                <div class="field-name">West Ridge <span class="field-sensor-tag moist-warn">💧 28% Low</span></div>
+                <div class="field-meta">Winter wheat · 31 acres · Sensor SN-105</div>
+              </div>
+              <div class="health"><span class="health-dot attention"></span>Watch</div>
+              <div class="field-yield">22.8 t<span>forecast yield</span></div>
+            </article>
+
+            <article class="field-row" data-field-id="creekside" data-field="rice">
+              <div class="field-thumb rice"></div>
+              <div>
+                <div class="field-name">Creekside 04 <span class="field-sensor-tag">💧 65% Flooded</span></div>
+                <div class="field-meta">Rice · 18.2 acres · Sensor SN-108</div>
+              </div>
+              <div class="health"><span class="health-dot"></span>Healthy</div>
+              <div class="field-yield">14.6 t<span>forecast yield</span></div>
+            </article>
+
+            <article class="field-row" data-field-id="south-flats" data-field="corn">
+              <div class="field-thumb"></div>
+              <div>
+                <div class="field-name">South Flats <span class="field-sensor-tag">💧 39% Moist</span></div>
+                <div class="field-meta">Corn · 27.1 acres · Sensor SN-110</div>
+              </div>
+              <div class="health"><span class="health-dot"></span>Healthy</div>
+              <div class="field-yield">19.4 t<span>forecast yield</span></div>
+            </article>
+          </div>
+
+          <!-- Interactive Visual Map View -->
+          <div id="field-map-container">
+            <div class="map-header-bar">
+              <div class="map-modes">
+                <button class="map-mode-btn active" data-map-layer="crops">Crops & Zones</button>
+                <button class="map-mode-btn" data-map-layer="moisture">Moisture Heatmap</button>
+                <button class="map-mode-btn" data-map-layer="ndvi">NDVI Vigour</button>
+              </div>
+              <span class="map-status-pill">
+                <span class="pulse-dot"></span>
+                4 IoT Sensors Live
+              </span>
+            </div>
+
+            <!-- SVG Farm Map Layout -->
+            <div class="map-canvas-wrapper">
+              <svg class="farm-svg" viewBox="0 0 660 380" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <!-- Crop Patterns -->
+                  <pattern id="pat-corn" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(25)">
+                    <rect width="16" height="16" fill="#3f7854"/>
+                    <line x1="0" y1="8" x2="16" y2="8" stroke="#316344" stroke-width="3"/>
+                    <circle cx="8" cy="8" r="1.5" fill="#e7b94d" opacity="0.65"/>
+                  </pattern>
+
+                  <pattern id="pat-wheat" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+                    <rect width="14" height="14" fill="#d2a647"/>
+                    <line x1="0" y1="7" x2="14" y2="7" stroke="#b78829" stroke-width="2.5"/>
+                    <line x1="7" y1="0" x2="7" y2="14" stroke="#e9c66e" stroke-width="1" stroke-dasharray="2,3"/>
+                  </pattern>
+
+                  <pattern id="pat-rice" width="18" height="18" patternUnits="userSpaceOnUse">
+                    <rect width="18" height="18" fill="#448d80"/>
+                    <path d="M 0,9 Q 4.5,4.5 9,9 T 18,9" fill="none" stroke="#68b4a7" stroke-width="1.8"/>
+                    <path d="M 0,18 Q 4.5,13.5 9,18 T 18,18" fill="none" stroke="#357367" stroke-width="1.8"/>
+                  </pattern>
+
+                  <!-- Heatmap Moisture Gradients -->
+                  <radialGradient id="heat-optimal" cx="50%" cy="50%" r="65%">
+                    <stop offset="0%" stop-color="#4aa269" stop-opacity="0.95"/>
+                    <stop offset="100%" stop-color="#2c6d44" stop-opacity="0.85"/>
+                  </radialGradient>
+
+                  <radialGradient id="heat-dry" cx="50%" cy="50%" r="65%">
+                    <stop offset="0%" stop-color="#e8853b" stop-opacity="0.95"/>
+                    <stop offset="60%" stop-color="#e7b94d" stop-opacity="0.85"/>
+                    <stop offset="100%" stop-color="#c8654e" stop-opacity="0.75"/>
+                  </radialGradient>
+
+                  <radialGradient id="heat-wet" cx="50%" cy="50%" r="65%">
+                    <stop offset="0%" stop-color="#3fa7bf" stop-opacity="0.95"/>
+                    <stop offset="100%" stop-color="#256e82" stop-opacity="0.85"/>
+                  </radialGradient>
+
+                  <!-- NDVI Gradients -->
+                  <linearGradient id="ndvi-high" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#216639"/>
+                    <stop offset="100%" stop-color="#349454"/>
+                  </linearGradient>
+                  <linearGradient id="ndvi-mod" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#a3b839"/>
+                    <stop offset="100%" stop-color="#d6aa28"/>
+                  </linearGradient>
+
+                  <!-- Filters -->
+                  <filter id="shadow" x="-8%" y="-8%" width="120%" height="120%">
+                    <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.16"/>
+                  </filter>
+                </defs>
+
+                <!-- Map Base Ground -->
+                <rect width="660" height="380" fill="#e8eee3"/>
+
+                <!-- Farm Perimeter Track / Boundary Road -->
+                <rect x="15" y="15" width="630" height="350" rx="14" fill="none" stroke="#d6dfd0" stroke-width="12"/>
+                <rect x="15" y="15" width="630" height="350" rx="14" fill="none" stroke="#c0ceb9" stroke-width="1.5" stroke-dasharray="6,5"/>
+
+                <!-- Access Roads Crossing Farm -->
+                <line x1="320" y1="15" x2="320" y2="365" stroke="#edf4e9" stroke-width="14"/>
+                <line x1="320" y1="15" x2="320" y2="365" stroke="#bccbb5" stroke-width="1" stroke-dasharray="4,4"/>
+                <line x1="15" y1="190" x2="645" y2="190" stroke="#edf4e9" stroke-width="14"/>
+                <line x1="15" y1="190" x2="645" y2="190" stroke="#bccbb5" stroke-width="1" stroke-dasharray="4,4"/>
+
+                <!-- Irrigation Creek River (flowing by Creekside) -->
+                <path d="M 15,285 C 100,280 180,315 285,305 C 305,303 318,295 320,290" fill="none" stroke="#9acfd5" stroke-width="8" stroke-linecap="round"/>
+                <path d="M 15,285 C 100,280 180,315 285,305 C 305,303 318,295 320,290" fill="none" stroke="#5faebd" stroke-width="3" stroke-linecap="round"/>
+
+                <!-- FIELD 1: North Meadow (Top Left) -->
+                <g class="parcel-group" id="grp-north-meadow" data-field-id="north-meadow">
+                  <path class="parcel selected" id="poly-north-meadow"
+                    d="M 32,32 L 305,32 L 305,178 L 32,178 Z"
+                    rx="8" fill="url(#pat-corn)" stroke="#2d573c" stroke-width="2"/>
+                  <!-- Field Label Plate -->
+                  <rect x="44" y="44" width="138" height="24" rx="6" fill="rgba(12,23,19,0.72)"/>
+                  <text x="52" y="60" fill="#ffffff" font-family="'DM Sans', sans-serif" font-size="11" font-weight="700">North Meadow · 24.5 ac</text>
+                  <text x="52" y="77" fill="#b9e3c2" font-family="'DM Sans', sans-serif" font-size="9" font-weight="600">🌽 Corn · Flowering</text>
+                  
+                  <!-- Sensor Node -->
+                  <g class="sensor-pin" transform="translate(170, 105)">
+                    <circle class="ping-circle" cx="0" cy="0" r="10" fill="none" stroke="#4ee27c" stroke-width="1.5"/>
+                    <circle cx="0" cy="0" r="14" fill="#ffffff" filter="url(#shadow)"/>
+                    <circle cx="0" cy="0" r="11" fill="#3e7652"/>
+                    <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="700">💧</text>
+                    <rect x="18" y="-12" width="62" height="22" rx="5" fill="#ffffff" filter="url(#shadow)"/>
+                    <text x="24" y="2" fill="#0c1713" font-size="10" font-weight="700">42%</text>
+                    <text x="47" y="2" fill="#3e7652" font-size="8" font-weight="700">SN-102</text>
+                  </g>
+                </g>
+
+                <!-- FIELD 2: West Ridge (Top Right) -->
+                <g class="parcel-group" id="grp-west-ridge" data-field-id="west-ridge">
+                  <path class="parcel" id="poly-west-ridge"
+                    d="M 335,32 L 628,32 L 628,178 L 335,178 Z"
+                    rx="8" fill="url(#pat-wheat)" stroke="#9a7122" stroke-width="2"/>
+                  <rect x="347" y="44" width="136" height="24" rx="6" fill="rgba(12,23,19,0.72)"/>
+                  <text x="355" y="60" fill="#ffffff" font-family="'DM Sans', sans-serif" font-size="11" font-weight="700">West Ridge · 31.0 ac</text>
+                  <text x="355" y="77" fill="#f5dfa8" font-family="'DM Sans', sans-serif" font-size="9" font-weight="600">🌾 Winter Wheat · Maturing</text>
+
+                  <!-- Sensor Node (Warning: Low moisture 28%) -->
+                  <g class="sensor-pin" transform="translate(480, 105)">
+                    <circle class="ping-circle warn" cx="0" cy="0" r="10" fill="none" stroke="#e7b94d" stroke-width="2"/>
+                    <circle cx="0" cy="0" r="14" fill="#ffffff" filter="url(#shadow)"/>
+                    <circle cx="0" cy="0" r="11" fill="#c8654e"/>
+                    <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="700">⚠️</text>
+                    <rect x="18" y="-12" width="76" height="22" rx="5" fill="#fff8ed" stroke="#e7b94d" stroke-width="1" filter="url(#shadow)"/>
+                    <text x="24" y="2" fill="#c8654e" font-size="10" font-weight="800">28% Low</text>
+                    <text x="66" y="2" fill="#6d7970" font-size="8" font-weight="700">SN-105</text>
+                  </g>
+                </g>
+
+                <!-- FIELD 3: Creekside 04 (Bottom Left) -->
+                <g class="parcel-group" id="grp-creekside" data-field-id="creekside">
+                  <path class="parcel" id="poly-creekside"
+                    d="M 32,202 L 305,202 L 305,348 L 32,348 Z"
+                    rx="8" fill="url(#pat-rice)" stroke="#2b645b" stroke-width="2"/>
+                  <rect x="44" y="214" width="134" height="24" rx="6" fill="rgba(12,23,19,0.72)"/>
+                  <text x="52" y="230" fill="#ffffff" font-family="'DM Sans', sans-serif" font-size="11" font-weight="700">Creekside 04 · 18.2 ac</text>
+                  <text x="52" y="247" fill="#c1eae3" font-family="'DM Sans', sans-serif" font-size="9" font-weight="600">🌱 Rice · Flooded Vegetative</text>
+
+                  <!-- Sensor Node -->
+                  <g class="sensor-pin" transform="translate(170, 260)">
+                    <circle class="ping-circle" cx="0" cy="0" r="10" fill="none" stroke="#36a3b8" stroke-width="1.8"/>
+                    <circle cx="0" cy="0" r="14" fill="#ffffff" filter="url(#shadow)"/>
+                    <circle cx="0" cy="0" r="11" fill="#357367"/>
+                    <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="700">🌊</text>
+                    <rect x="18" y="-12" width="65" height="22" rx="5" fill="#ffffff" filter="url(#shadow)"/>
+                    <text x="24" y="2" fill="#1b5a50" font-size="10" font-weight="700">65%</text>
+                    <text x="49" y="2" fill="#6d7970" font-size="8" font-weight="700">SN-108</text>
+                  </g>
+                </g>
+
+                <!-- FIELD 4: South Flats (Bottom Right) -->
+                <g class="parcel-group" id="grp-south-flats" data-field-id="south-flats">
+                  <path class="parcel" id="poly-south-flats"
+                    d="M 335,202 L 628,202 L 628,348 L 335,348 Z"
+                    rx="8" fill="url(#pat-corn)" stroke="#2d573c" stroke-width="2"/>
+                  <rect x="347" y="214" width="134" height="24" rx="6" fill="rgba(12,23,19,0.72)"/>
+                  <text x="355" y="230" fill="#ffffff" font-family="'DM Sans', sans-serif" font-size="11" font-weight="700">South Flats · 27.1 ac</text>
+                  <text x="355" y="247" fill="#b9e3c2" font-family="'DM Sans', sans-serif" font-size="9" font-weight="600">🌽 Corn · Vegetative V8</text>
+
+                  <!-- Sensor Node -->
+                  <g class="sensor-pin" transform="translate(480, 275)">
+                    <circle class="ping-circle" cx="0" cy="0" r="10" fill="none" stroke="#4ee27c" stroke-width="1.5"/>
+                    <circle cx="0" cy="0" r="14" fill="#ffffff" filter="url(#shadow)"/>
+                    <circle cx="0" cy="0" r="11" fill="#3e7652"/>
+                    <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="9" font-weight="700">💧</text>
+                    <rect x="18" y="-12" width="62" height="22" rx="5" fill="#ffffff" filter="url(#shadow)"/>
+                    <text x="24" y="2" fill="#0c1713" font-size="10" font-weight="700">39%</text>
+                    <text x="47" y="2" fill="#3e7652" font-size="8" font-weight="700">SN-110</text>
+                  </g>
+                </g>
+
+                <!-- Farm Center Weather / Gateway Mast Icon -->
+                <g transform="translate(320, 190)">
+                  <circle cx="0" cy="0" r="11" fill="#163026" stroke="#ffffff" stroke-width="2" filter="url(#shadow)"/>
+                  <text x="0" y="4" text-anchor="middle" fill="#ffffff" font-size="9">📡</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- Real-time Field Telemetry & Soil Health Panel -->
+            <div class="telemetry-card" id="telemetry-card">
+              <div class="telemetry-header">
+                <div>
+                  <div class="telemetry-title" id="tel-field-name">
+                    North Meadow
+                    <span class="telemetry-badge healthy" id="tel-status-badge">● Healthy</span>
+                  </div>
+                  <div class="telemetry-meta" id="tel-meta">Corn · 24.5 acres · Probe SN-102 · Synced 4s ago</div>
+                </div>
+                <div class="map-legend">
+                  <span class="legend-item"><span class="legend-color" style="background:#4e8257"></span> Optimal (&gt;35%)</span>
+                  <span class="legend-item"><span class="legend-color" style="background:#e7b94d"></span> Dry Watch (&lt;30%)</span>
+                  <span class="legend-item"><span class="legend-color" style="background:#438f81"></span> Flooded (&gt;60%)</span>
+                </div>
+              </div>
+
+              <div class="telemetry-grid">
+                <div class="telemetry-item">
+                  <div class="label">
+                    <span>Soil Moisture</span>
+                    <span id="tel-moist-lbl">Optimal</span>
+                  </div>
+                  <div class="val" id="tel-moisture">42%</div>
+                  <div class="bar"><div class="bar-fill" id="tel-moist-bar" style="width: 42%; background: var(--leaf);"></div></div>
+                  <div class="sub" id="tel-moist-sub">Target: 38% – 50%</div>
+                </div>
+
+                <div class="telemetry-item">
+                  <div class="label">
+                    <span>Soil Temp & pH</span>
+                    <span>Stable</span>
+                  </div>
+                  <div class="val" id="tel-temp">21.4°C</div>
+                  <div class="bar"><div class="bar-fill" style="width: 68%; background: #4f8069;"></div></div>
+                  <div class="sub" id="tel-ph">pH 6.6 · Neutral</div>
+                </div>
+
+                <div class="telemetry-item">
+                  <div class="label">
+                    <span>NPK Telemetry</span>
+                    <span id="tel-npk-status">Balanced</span>
+                  </div>
+                  <div class="val" id="tel-npk">N: 84 mg</div>
+                  <div class="bar"><div class="bar-fill" id="tel-npk-bar" style="width: 84%; background: var(--leaf);"></div></div>
+                  <div class="sub" id="tel-npk-sub">P: 42 mg · K: 195 mg/kg</div>
+                </div>
+
+                <div class="telemetry-item">
+                  <div class="label">
+                    <span>Irrigation Valve</span>
+                    <span id="tel-valve-id">V-01</span>
+                  </div>
+                  <div class="val" id="tel-valve-status">Idle · Ready</div>
+                  <div class="bar"><div class="bar-fill" id="tel-valve-bar" style="width: 15%; background: var(--line);"></div></div>
+                  <div class="sub" id="tel-valve-sub">Next scheduled: 4:30 PM</div>
+                </div>
+              </div>
+
+              <div class="telemetry-footer">
+                <div style="font-size:12px;color:var(--muted)">
+                  <strong style="color:var(--ink)" id="tel-action-recommendation">Recommendation:</strong> Moisture levels support standard vegetative growth. No immediate irrigation needed.
+                </div>
+                <button class="irrigation-control-btn" id="irrigate-btn">
+                  <span id="irrigate-icon">💧</span>
+                  <span id="irrigate-btn-text">Quick Irrigate Zone</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <div>
@@ -228,18 +802,277 @@
     </main>
   </div>
   <script>
+    // Navigation selection
     const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => item.addEventListener('click', () => { navItems.forEach(nav => nav.classList.remove('active')); item.classList.add('active'); }));
-    document.querySelectorAll('.task-check').forEach(check => check.addEventListener('click', () => check.closest('.task').classList.toggle('done')));
-    const fieldList = document.getElementById('field-list');
-    const mapMessage = document.getElementById('map-message');
-    document.querySelectorAll('.view-toggle button').forEach(button => button.addEventListener('click', () => {
-      document.querySelectorAll('.view-toggle button').forEach(toggle => toggle.classList.remove('active'));
-      button.classList.add('active');
-      const isMap = button.dataset.view === 'map';
-      fieldList.style.display = isMap ? 'none' : 'grid';
-      mapMessage.style.display = isMap ? 'block' : 'none';
+    navItems.forEach(item => item.addEventListener('click', () => { 
+      navItems.forEach(nav => nav.classList.remove('active')); 
+      item.classList.add('active'); 
     }));
+
+    // Task toggle
+    document.querySelectorAll('.task-check').forEach(check => {
+      check.addEventListener('click', () => check.closest('.task').classList.toggle('done'));
+    });
+
+    // Field Data Model for Sensors, Moisture & Telemetry
+    const fieldsData = {
+      'north-meadow': {
+        name: 'North Meadow',
+        crop: 'Corn · Flowering stage',
+        acres: '24.5 acres',
+        sensorId: 'SN-102',
+        status: 'Healthy',
+        statusType: 'healthy',
+        moisture: 42,
+        moistureLabel: 'Optimal',
+        moistureSub: 'Target: 38% – 50%',
+        moistColor: 'var(--leaf)',
+        temp: '21.4°C',
+        ph: 'pH 6.6 · Neutral',
+        npk: 'N: 84 mg',
+        npkStatus: 'Balanced',
+        npkSub: 'P: 42 mg · K: 195 mg/kg',
+        valveId: 'V-01',
+        valveStatus: 'Idle · Ready',
+        valveSub: 'Next scheduled: 4:30 PM',
+        isIrrigating: false,
+        recommendation: 'Moisture levels support standard vegetative growth. No immediate irrigation needed.',
+        layerFills: {
+          crops: 'url(#pat-corn)',
+          moisture: 'url(#heat-optimal)',
+          ndvi: 'url(#ndvi-high)'
+        }
+      },
+      'west-ridge': {
+        name: 'West Ridge',
+        crop: 'Winter wheat · Grain filling',
+        acres: '31.0 acres',
+        sensorId: 'SN-105',
+        status: 'Watch · Moisture Low',
+        statusType: 'attention',
+        moisture: 28,
+        moistureLabel: 'Low (Dry)',
+        moistureSub: 'Target: 35% – 45%',
+        moistColor: 'var(--coral)',
+        temp: '23.8°C',
+        ph: 'pH 6.9 · Slightly alkaline',
+        npk: 'N: 52 mg',
+        npkStatus: 'Needs N Boost',
+        npkSub: 'P: 38 mg · K: 160 mg/kg',
+        valveId: 'V-02',
+        valveStatus: 'Attention · Deficit',
+        valveSub: 'Irrigation urgently recommended',
+        isIrrigating: false,
+        recommendation: 'Soil moisture is 7% below threshold. Activate valve V-02 for a 35-minute cycle.',
+        layerFills: {
+          crops: 'url(#pat-wheat)',
+          moisture: 'url(#heat-dry)',
+          ndvi: 'url(#ndvi-mod)'
+        }
+      },
+      'creekside': {
+        name: 'Creekside 04',
+        crop: 'Rice · Flooded vegetative',
+        acres: '18.2 acres',
+        sensorId: 'SN-108',
+        status: 'Healthy',
+        statusType: 'healthy',
+        moisture: 65,
+        moistureLabel: 'Submerged',
+        moistureSub: 'Target: 60% – 75% flooded',
+        moistColor: '#36a3b8',
+        temp: '20.1°C',
+        ph: 'pH 6.2 · Slightly acidic',
+        npk: 'N: 78 mg',
+        npkStatus: 'Optimal',
+        npkSub: 'P: 48 mg · K: 180 mg/kg',
+        valveId: 'V-03',
+        valveStatus: 'Flood Gate Steady',
+        valveSub: 'Creek water inflow nominal',
+        isIrrigating: false,
+        recommendation: 'Water table depth is optimal for mid-tillering rice stage. Maintain current weir height.',
+        layerFills: {
+          crops: 'url(#pat-rice)',
+          moisture: 'url(#heat-wet)',
+          ndvi: 'url(#ndvi-high)'
+        }
+      },
+      'south-flats': {
+        name: 'South Flats',
+        crop: 'Corn · Vegetative V8',
+        acres: '27.1 acres',
+        sensorId: 'SN-110',
+        status: 'Healthy',
+        statusType: 'healthy',
+        moisture: 39,
+        moistureLabel: 'Optimal',
+        moistureSub: 'Target: 36% – 48%',
+        moistColor: 'var(--leaf)',
+        temp: '22.0°C',
+        ph: 'pH 6.5 · Neutral',
+        npk: 'N: 80 mg',
+        npkStatus: 'Balanced',
+        npkSub: 'P: 44 mg · K: 190 mg/kg',
+        valveId: 'V-04',
+        valveStatus: 'Idle · Standby',
+        valveSub: 'Next scheduled: Tomorrow 5:00 AM',
+        isIrrigating: false,
+        recommendation: 'Root-zone hydration is uniform. Continue monitor schedule.',
+        layerFills: {
+          crops: 'url(#pat-corn)',
+          moisture: 'url(#heat-optimal)',
+          ndvi: 'url(#ndvi-high)'
+        }
+      }
+    };
+
+    let selectedFieldId = 'north-meadow';
+    let currentMapLayer = 'crops';
+
+    // Update Telemetry Panel UI
+    function renderTelemetry(fieldId) {
+      const data = fieldsData[fieldId];
+      if (!data) return;
+
+      document.getElementById('tel-field-name').innerHTML = `
+        ${data.name} 
+        <span class="telemetry-badge ${data.statusType}">● ${data.status}</span>
+      `;
+      document.getElementById('tel-meta').textContent = `${data.crop} · ${data.acres} · Probe ${data.sensorId} · Synced just now`;
+
+      // Moisture
+      document.getElementById('tel-moisture').textContent = `${data.moisture}%`;
+      document.getElementById('tel-moist-lbl').textContent = data.moistureLabel;
+      const moistBar = document.getElementById('tel-moist-bar');
+      moistBar.style.width = `${Math.min(data.moisture, 100)}%`;
+      moistBar.style.backgroundColor = data.moistColor;
+      document.getElementById('tel-moist-sub').textContent = data.moistureSub;
+
+      // Temp & pH
+      document.getElementById('tel-temp').textContent = data.temp;
+      document.getElementById('tel-ph').textContent = data.ph;
+
+      // NPK
+      document.getElementById('tel-npk').textContent = data.npk;
+      document.getElementById('tel-npk-status').textContent = data.npkStatus;
+      document.getElementById('tel-npk-sub').textContent = data.npkSub;
+
+      // Valve
+      document.getElementById('tel-valve-id').textContent = data.valveId;
+      document.getElementById('tel-valve-status').textContent = data.isIrrigating ? 'Active · Flowing 22 L/m' : data.valveStatus;
+      document.getElementById('tel-valve-sub').textContent = data.isIrrigating ? 'Cycle running (14m remaining)' : data.valveSub;
+      const valveBar = document.getElementById('tel-valve-bar');
+      valveBar.style.width = data.isIrrigating ? '100%' : '15%';
+      valveBar.style.backgroundColor = data.isIrrigating ? '#257896' : 'var(--line)';
+
+      // Action & Button
+      document.getElementById('tel-action-recommendation').textContent = data.isIrrigating 
+        ? 'Irrigation In Progress:' 
+        : 'Recommendation:';
+      document.getElementById('tel-action-recommendation').nextSibling.textContent = ' ' + (data.isIrrigating 
+        ? `Water dispensing actively into ${data.name}. Moisture will stabilize within 20 minutes.` 
+        : data.recommendation);
+
+      const irrigateBtn = document.getElementById('irrigate-btn');
+      const irrigateText = document.getElementById('irrigate-btn-text');
+      const irrigateIcon = document.getElementById('irrigate-icon');
+      if (data.isIrrigating) {
+        irrigateBtn.classList.add('active');
+        irrigateText.textContent = 'Stop Zone Irrigation';
+        irrigateIcon.textContent = '⏹';
+      } else {
+        irrigateBtn.classList.remove('active');
+        irrigateText.textContent = `Quick Irrigate Zone (${data.valveId})`;
+        irrigateIcon.textContent = '💧';
+      }
+    }
+
+    // Select Field Function
+    function selectField(fieldId) {
+      selectedFieldId = fieldId;
+      document.querySelectorAll('.parcel').forEach(p => p.classList.remove('selected'));
+      const activePoly = document.getElementById(`poly-${fieldId}`);
+      if (activePoly) activePoly.classList.add('selected');
+      renderTelemetry(fieldId);
+    }
+
+    // Apply Map Layer
+    function applyMapLayer(layerName) {
+      currentMapLayer = layerName;
+      document.querySelectorAll('.map-mode-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mapLayer === layerName);
+      });
+
+      Object.keys(fieldsData).forEach(fieldId => {
+        const poly = document.getElementById(`poly-${fieldId}`);
+        if (poly && fieldsData[fieldId].layerFills[layerName]) {
+          poly.setAttribute('fill', fieldsData[fieldId].layerFills[layerName]);
+        }
+      });
+    }
+
+    // Map Layer Buttons
+    document.querySelectorAll('.map-mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyMapLayer(btn.dataset.mapLayer));
+    });
+
+    // Parcel & Pin Click handlers on SVG
+    document.querySelectorAll('.parcel-group').forEach(grp => {
+      grp.addEventListener('click', () => {
+        const fieldId = grp.dataset.fieldId;
+        if (fieldId) selectField(fieldId);
+      });
+    });
+
+    // Irrigation Valve Toggle Button
+    document.getElementById('irrigate-btn').addEventListener('click', () => {
+      const data = fieldsData[selectedFieldId];
+      if (!data) return;
+      data.isIrrigating = !data.isIrrigating;
+      if (data.isIrrigating) {
+        data.moisture = Math.min(data.moisture + 6, 85);
+        if (selectedFieldId === 'west-ridge') {
+          data.status = 'Irrigating · Recovering';
+          data.statusType = 'healthy';
+        }
+      }
+      renderTelemetry(selectedFieldId);
+    });
+
+    // Toggle between List and Map View
+    const fieldList = document.getElementById('field-list');
+    const fieldMapContainer = document.getElementById('field-map-container');
+    const viewButtons = document.querySelectorAll('.view-toggle button');
+
+    function switchView(view) {
+      viewButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
+      if (view === 'map') {
+        fieldList.style.display = 'none';
+        fieldMapContainer.style.display = 'block';
+        selectField(selectedFieldId);
+      } else {
+        fieldList.style.display = 'grid';
+        fieldMapContainer.style.display = 'none';
+      }
+    }
+
+    viewButtons.forEach(button => {
+      button.addEventListener('click', () => switchView(button.dataset.view));
+    });
+
+    // Clicking any row in List View jumps to Map view and selects that field
+    document.querySelectorAll('.field-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const fieldId = row.dataset.fieldId;
+        if (fieldId) {
+          selectedFieldId = fieldId;
+          switchView('map');
+        }
+      });
+    });
+
+    // Initial render
+    renderTelemetry(selectedFieldId);
   </script>
 </body>
 </html>
