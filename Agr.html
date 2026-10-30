@@ -21,6 +21,7 @@
     body { margin: 0; color: var(--ink); background: var(--cream); }
     button, input { font: inherit; }
     button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid #e8b84d; outline-offset: 3px; }
     .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
     aside { padding: 28px 18px; color: #eef8ee; background: linear-gradient(160deg, #123b2a, #1e5b3c); }
     .logo { display: flex; align-items: center; gap: 10px; padding: 0 10px 40px; font-size: 21px; font-weight: 800; letter-spacing: -.04em; }
@@ -39,7 +40,7 @@
     h1 { margin-bottom: 7px; font-size: clamp(25px, 3vw, 37px); letter-spacing: -.06em; }
     header p, .muted { margin-bottom: 0; color: var(--muted); font-size: 14px; }
     .header-actions { display: flex; gap: 10px; align-items: center; }
-    .search { width: 220px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px; outline: 0; background: #fff; }
+    .search { width: 220px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px; outline: 0; background: #fff; transition: .2s; }
     .search:focus { border-color: var(--green); box-shadow: 0 0 0 3px #d7eddb; }
     .avatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--green); background: #d9edd9; font-size: 12px; font-weight: 800; }
     .stats { display: grid; grid-template-columns: 1.35fr repeat(3, 1fr); gap: 14px; margin-bottom: 26px; }
@@ -62,6 +63,7 @@
     .fields { display: grid; gap: 10px; }
     .field { display: grid; grid-template-columns: 48px 1fr 105px 100px; gap: 14px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: 11px; transition: .2s; }
     .field:hover { border-color: #a8c7ad; background: #fbfefb; transform: translateX(3px); }
+    .field[hidden] { display: none; }
     .crop-image { width: 48px; height: 48px; border-radius: 9px; background: linear-gradient(135deg, #b7d878, #4f965a); }
     .crop-image.wheat { background: linear-gradient(135deg, #f2d77b, #bd803e); }
     .crop-image.rice { background: linear-gradient(135deg, #a1d8c6, #438e7a); }
@@ -97,18 +99,18 @@
       <div class="logo"><span class="logo-mark">⌁</span>AgriHub</div>
       <div class="section-label">Farm workspace</div>
       <nav>
-        <button class="active">◈ &nbsp;Dashboard</button>
-        <button>▦ &nbsp;My fields</button>
-        <button>◷ &nbsp;Farm schedule</button>
-        <button>↗ &nbsp;Market insights</button>
-        <button>⚙ &nbsp;Settings</button>
+        <button type="button" class="active" aria-current="page">◈ &nbsp;Dashboard</button>
+        <button type="button">▦ &nbsp;My fields</button>
+        <button type="button">◷ &nbsp;Farm schedule</button>
+        <button type="button">↗ &nbsp;Market insights</button>
+        <button type="button">⚙ &nbsp;Settings</button>
       </nav>
       <div class="season"><strong>2026 Kharif season</strong>Crop cycle is on track. Harvest preparation begins next month.<div class="progress"><span></span></div>72% complete</div>
     </aside>
     <main>
       <header>
         <div><h1>Good morning, Arjun</h1><p>Tuesday, October 7, 2026 · Green Valley Farm</p></div>
-        <div class="header-actions"><input class="search" type="search" placeholder="Search crops or fields" aria-label="Search crops or fields"><div class="avatar">AK</div></div>
+        <div class="header-actions"><input class="search" type="search" placeholder="Search crops or fields" aria-label="Search crops or fields" aria-controls="field-list"><div class="avatar" aria-label="Arjun Kumar">AK</div></div>
       </header>
       <section class="stats" aria-label="Farm summary">
         <article class="card welcome"><div style="font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#c4e6c9">Farm snapshot</div><h2>Better data. Healthier crops.</h2><a href="#fields">Review field health →</a></article>
@@ -118,19 +120,20 @@
       </section>
       <div class="columns">
         <section class="card panel" id="fields">
-          <div class="panel-heading"><div><h3>Crop and field health</h3><p>Monitor every growing area at a glance</p></div><button class="outline">+ Add field</button></div>
-          <div class="fields">
-            <article class="field"><div class="crop-image"></div><div><strong>North Meadow</strong><small>Maize · 24.5 acres</small></div><div class="health"><span class="dot"></span>Healthy</div><div class="yield">31.2 t<small>forecast</small></div></article>
-            <article class="field"><div class="crop-image wheat"></div><div><strong>West Ridge</strong><small>Wheat · 31 acres</small></div><div class="health"><span class="dot watch"></span>Watch</div><div class="yield">28.8 t<small>forecast</small></div></article>
-            <article class="field"><div class="crop-image rice"></div><div><strong>Canal Block 04</strong><small>Rice · 18.2 acres</small></div><div class="health"><span class="dot"></span>Healthy</div><div class="yield">24.6 t<small>forecast</small></div></article>
-            <article class="field"><div class="crop-image"></div><div><strong>South Flats</strong><small>Maize · 27.1 acres</small></div><div class="health"><span class="dot"></span>Healthy</div><div class="yield">35.4 t<small>forecast</small></div></article>
+          <div class="panel-heading"><div><h3>Crop and field health</h3><p>Monitor every growing area at a glance</p></div><button type="button" class="outline">+ Add field</button></div>
+          <div class="fields" id="field-list" aria-live="polite">
+            <article class="field"><div class="crop-image" aria-hidden="true"></div><div><strong>North Meadow</strong><small>Maize · 24.5 acres</small></div><div class="health"><span class="dot"></span>Healthy</div><div class="yield">31.2 t<small>forecast</small></div></article>
+            <article class="field"><div class="crop-image wheat" aria-hidden="true"></div><div><strong>West Ridge</strong><small>Wheat · 31 acres</small></div><div class="health"><span class="dot watch"></span>Watch</div><div class="yield">28.8 t<small>forecast</small></div></article>
+            <article class="field"><div class="crop-image rice" aria-hidden="true"></div><div><strong>Canal Block 04</strong><small>Rice · 18.2 acres</small></div><div class="health"><span class="dot"></span>Healthy</div><div class="yield">24.6 t<small>forecast</small></div></article>
+            <article class="field"><div class="crop-image" aria-hidden="true"></div><div><strong>South Flats</strong><small>Maize · 27.1 acres</small></div><div class="health"><span class="dot"></span>Healthy</div><div class="yield">35.4 t<small>forecast</small></div></article>
           </div>
+          <p class="muted" id="no-results" role="status" hidden>No fields match your search.</p>
         </section>
         <div>
           <section class="card panel"><div class="panel-heading"><div><h3>Today's tasks</h3><p>Keep your farm moving</p></div><span class="up">9 total</span></div><div class="tasks">
-            <div class="task"><button class="check" aria-label="Complete irrigation check"></button><div><div class="task-name">Check irrigation lines</div><small>North Meadow · Due 10:30 AM</small></div></div>
-            <div class="task done"><button class="check" aria-label="Completed soil sensor check">✓</button><div><div class="task-name">Calibrate soil sensor</div><small>Canal Block 04 · Completed</small></div></div>
-            <div class="task"><button class="check" aria-label="Complete pest inspection"></button><div><div class="task-name">Inspect wheat for pests</div><small>West Ridge · Due 2:00 PM</small></div></div>
+            <div class="task"><button type="button" class="check" aria-label="Complete irrigation check" aria-pressed="false"></button><div><div class="task-name">Check irrigation lines</div><small>North Meadow · Due 10:30 AM</small></div></div>
+            <div class="task done"><button type="button" class="check" aria-label="Completed soil sensor check" aria-pressed="true">✓</button><div><div class="task-name">Calibrate soil sensor</div><small>Canal Block 04 · Completed</small></div></div>
+            <div class="task"><button type="button" class="check" aria-label="Complete pest inspection" aria-pressed="false"></button><div><div class="task-name">Inspect wheat for pests</div><small>West Ridge · Due 2:00 PM</small></div></div>
           </div></section>
           <section class="card panel weather"><div class="panel-heading"><div><h3>Field conditions</h3><p>Green Valley, Punjab</p></div><span class="muted" style="font-size:11px">Updated 8:42 AM</span></div><div class="weather-main"><div><div class="temperature">29°</div><span class="muted">Feels like 31° · Partly cloudy</span></div><div class="sun">🌤</div></div><div class="weather-stats"><span>Humidity<strong>62%</strong></span><span>Wind<strong>12 km/h</strong></span><span>Rain<strong>10%</strong></span></div></section>
         </div>
@@ -139,13 +142,33 @@
   </div>
   <script>
     document.querySelectorAll('nav button').forEach(button => button.addEventListener('click', () => {
-      document.querySelectorAll('nav button').forEach(item => item.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(item => {
+        item.classList.remove('active');
+        item.removeAttribute('aria-current');
+      });
       button.classList.add('active');
+      button.setAttribute('aria-current', 'page');
     }));
+    const search = document.querySelector('.search');
+    const fields = [...document.querySelectorAll('.field')];
+    const noResults = document.querySelector('#no-results');
+    search.addEventListener('input', () => {
+      const query = search.value.trim().toLowerCase();
+      let visibleFields = 0;
+      fields.forEach(field => {
+        const matches = field.textContent.toLowerCase().includes(query);
+        field.hidden = !matches;
+        if (matches) visibleFields++;
+      });
+      noResults.hidden = visibleFields > 0;
+    });
     document.querySelectorAll('.check').forEach(button => button.addEventListener('click', () => {
       const task = button.closest('.task');
       task.classList.toggle('done');
-      button.textContent = task.classList.contains('done') ? '✓' : '';
+      const isDone = task.classList.contains('done');
+      button.textContent = isDone ? '✓' : '';
+      button.setAttribute('aria-pressed', String(isDone));
+      button.setAttribute('aria-label', `${isDone ? 'Completed' : 'Complete'} ${task.querySelector('.task-name').textContent.toLowerCase()}`);
     }));
   </script>
 </body>
