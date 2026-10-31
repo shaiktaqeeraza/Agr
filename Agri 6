@@ -92,7 +92,7 @@
 
 	<main id="top">
 		<section class="shell hero">
-			<div><div class="kicker">The grower's marketplace</div><h1>Good food starts with good soil.</h1><p class="hero-copy">A calmer way for farmers, kitchens, and thoughtful buyers to move fresh produce from the field to the people who value it.</p><div class="hero-actions"><a class="button button-primary" href="#market">Explore the market <span>↗</span></a><a class="button button-light" href="#join">Join the network</a></div></div>
+			<div><div class="kicker">The grower</div><h1>Good food starts with good soil.</h1><p class="hero-copy">A calmer way for farmers, kitchens, and thoughtful buyers to move fresh produce from the field to the people who value it.</p><div class="hero-actions"><a class="button button-primary" href="#market">Explore the market <span>↗</span></a><a class="button button-light" href="#join">Join the network</a></div></div>
 			<div class="hero-visual"><div class="hero-note"><div><strong>Morning harvest · Nashik</strong><span>Tomatoes, picked today by Meera Farms</span></div><div class="trend">+18% this week</div></div></div>
 		</section>
 
