@@ -6,50 +6,51 @@
   <title>AgriHub | Smart farm management</title>
   <style>
     :root {
-      --green: #d6e8df;
+      --green: #4f9b68;
       --deep: #123b2a;
       --mint: #e9f5eb;
-      --cream: #f7faf5;
+      --cream: #f5f8f3;
       --ink: #193126;
       --muted: #718279;
-      --line: #dbe8dd;
+      --line: #dce8df;
       --gold: #e8b84d;
       --red: #ee745c;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
     * { box-sizing: border-box; }
-    body { margin: 0; color: var(--ink); background: var(--cream); }
+    body { margin: 0; color: var(--ink); background: radial-gradient(circle at 75% -10%, #ffffff 0, var(--cream) 45%); }
     button, input { font: inherit; }
     button { cursor: pointer; }
     button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid #e8b84d; outline-offset: 3px; }
-    .layout { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
-    aside { padding: 28px 18px; color: #eef8ee; background: linear-gradient(160deg, #123b2a, #1e5b3c); }
-    .logo { display: flex; align-items: center; gap: 10px; padding: 0 10px 40px; font-size: 21px; font-weight: 800; letter-spacing: -.04em; }
-    .logo-mark { display: grid; place-items: center; width: 32px; height: 32px; color: var(--deep); background: var(--gold); border-radius: 12px 12px 12px 3px; transform: rotate(-8deg); }
+    .layout { display: grid; grid-template-columns: 258px 1fr; min-height: 100vh; }
+    aside { display: flex; flex-direction: column; padding: 30px 18px 22px; color: #eef8ee; background: linear-gradient(160deg, #102f23, #1e5b3c 72%, #28714b); box-shadow: 8px 0 30px rgba(18,59,42,.08); }
+    .logo { display: flex; align-items: center; gap: 11px; padding: 0 10px 46px; font-size: 22px; font-weight: 800; letter-spacing: -.05em; }
+    .logo-mark { display: grid; place-items: center; width: 34px; height: 34px; color: var(--deep); background: var(--gold); border-radius: 12px 12px 12px 3px; box-shadow: 0 6px 15px rgba(232,184,77,.2); transform: rotate(-8deg); }
     .section-label { padding: 0 12px 10px; color: #9fc0a8; font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
-    nav { display: grid; gap: 6px; }
-    nav button { border: 0; border-radius: 10px; padding: 12px; color: #c4d9c8; background: transparent; text-align: left; font-weight: 700; }
-    nav button:hover, nav button.active { color: #fff; background: rgba(255,255,255,.14); }
-    .season { margin-top: auto; padding: 16px; border-radius: 13px; color: #c9e0cc; background: rgba(0,0,0,.17); font-size: 12px; line-height: 1.5; }
+    nav { display: grid; gap: 7px; }
+    nav button { border: 1px solid transparent; border-radius: 11px; padding: 13px; color: #c4d9c8; background: transparent; text-align: left; font-weight: 700; transition: .2s ease; }
+    nav button:hover, nav button.active { color: #fff; background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.08); transform: translateX(2px); }
+    .season { margin-top: auto; padding: 17px; border: 1px solid rgba(255,255,255,.08); border-radius: 15px; color: #c9e0cc; background: rgba(0,0,0,.17); font-size: 12px; line-height: 1.5; }
     .season strong { display: block; margin-bottom: 5px; color: #fff; font-size: 14px; }
     .progress { height: 6px; margin: 13px 0 7px; overflow: hidden; border-radius: 8px; background: #0d2c20; }
     .progress span { display: block; width: 72%; height: 100%; border-radius: inherit; background: var(--gold); }
-    main { width: min(1450px, 100%); margin: auto; padding: 36px clamp(22px, 4vw, 58px) 55px; }
-    header { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 35px; }
+    main { width: min(1450px, 100%); margin: auto; padding: 42px clamp(22px, 4vw, 64px) 60px; }
+    header { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 38px; }
     h1, h2, h3, p { margin-top: 0; }
-    h1 { margin-bottom: 7px; font-size: clamp(25px, 3vw, 37px); letter-spacing: -.06em; }
+    h1 { margin-bottom: 8px; font-size: clamp(27px, 3vw, 40px); letter-spacing: -.065em; }
     header p, .muted { margin-bottom: 0; color: var(--muted); font-size: 14px; }
     .header-actions { display: flex; gap: 10px; align-items: center; }
-    .search { width: 220px; padding: 11px 14px; border: 1px solid var(--line); border-radius: 10px; outline: 0; background: #fff; transition: .2s; }
+    .search { width: 240px; padding: 12px 15px; border: 1px solid var(--line); border-radius: 11px; outline: 0; background: rgba(255,255,255,.88); transition: .2s; }
     .search:focus { border-color: var(--green); box-shadow: 0 0 0 3px #d7eddb; }
-    .avatar { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--green); background: #d9edd9; font-size: 12px; font-weight: 800; }
+    .avatar { display: grid; place-items: center; width: 42px; height: 42px; border: 3px solid #fff; border-radius: 50%; color: var(--green); background: #d9edd9; box-shadow: 0 5px 15px rgba(31,73,46,.1); font-size: 12px; font-weight: 800; }
     .stats { display: grid; grid-template-columns: 1.35fr repeat(3, 1fr); gap: 14px; margin-bottom: 26px; }
-    .card { border: 1px solid var(--line); border-radius: 16px; background: #fff; box-shadow: 0 12px 30px rgba(31,73,46,.06); }
-    .welcome { min-height: 160px; padding: 25px; color: #fff; background: linear-gradient(135deg, #2e8254, #1f6744); position: relative; overflow: hidden; }
+    .card { border: 1px solid var(--line); border-radius: 18px; background: rgba(255,255,255,.92); box-shadow: 0 14px 35px rgba(31,73,46,.07); }
+    .welcome { min-height: 160px; padding: 27px; color: #fff; background: linear-gradient(135deg, #31915b, #1b6040); position: relative; overflow: hidden; }
     .welcome:after { content: ""; position: absolute; width: 180px; height: 180px; right: -40px; top: -80px; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; }
     .welcome h2 { max-width: 250px; margin-bottom: 16px; font-size: 24px; letter-spacing: -.05em; }
     .welcome a { color: #fff; font-size: 13px; font-weight: 800; }
-    .stat { min-height: 160px; padding: 21px; }
+    .stat { min-height: 160px; padding: 23px; transition: .2s ease; }
+    .stat:hover { transform: translateY(-3px); box-shadow: 0 18px 38px rgba(31,73,46,.11); }
     .stat-title { display: flex; justify-content: space-between; color: var(--muted); font-size: 12px; font-weight: 700; }
     .stat-value { display: block; margin: 24px 0 4px; font-size: 30px; letter-spacing: -.06em; }
     .up { color: var(--green); font-size: 11px; font-weight: 800; }
@@ -59,10 +60,11 @@
     .panel-heading { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 18px; }
     h3 { margin-bottom: 5px; font-size: 18px; letter-spacing: -.04em; }
     .panel-heading p { margin-bottom: 0; color: var(--muted); font-size: 12px; }
-    .outline { border: 1px solid var(--line); border-radius: 8px; padding: 8px 11px; color: var(--green); background: #fff; font-size: 12px; font-weight: 800; }
+    .outline { border: 1px solid #c8dfcc; border-radius: 9px; padding: 9px 12px; color: #32754a; background: #f8fcf8; font-size: 12px; font-weight: 800; transition: .2s ease; }
+    .outline:hover { border-color: var(--green); background: #eef8ef; transform: translateY(-1px); }
     .fields { display: grid; gap: 10px; }
     .field { display: grid; grid-template-columns: 48px 1fr 105px 100px; gap: 14px; align-items: center; padding: 12px; border: 1px solid var(--line); border-radius: 11px; transition: .2s; }
-    .field:hover { border-color: #a8c7ad; background: #fbfefb; transform: translateX(3px); }
+    .field:hover { border-color: #a8c7ad; background: #fbfefb; transform: translateX(3px); box-shadow: 0 6px 16px rgba(31,73,46,.05); }
     .field[hidden] { display: none; }
     .crop-image { width: 48px; height: 48px; border-radius: 9px; background: linear-gradient(135deg, #b7d878, #4f965a); }
     .crop-image.wheat { background: linear-gradient(135deg, #f2d77b, #bd803e); }
@@ -82,14 +84,14 @@
     .task.done .task-name { color: var(--muted); text-decoration: line-through; }
     .task-name { font-size: 13px; font-weight: 700; }
     .task small { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; }
-    .weather { margin-top: 16px; background: #e7f3f2; }
+    .weather { margin-top: 16px; background: linear-gradient(145deg, #eaf6f3, #e0f0ee); }
     .weather-main { display: flex; justify-content: space-between; align-items: center; }
     .temperature { font-size: 42px; font-weight: 800; letter-spacing: -.08em; }
     .sun { font-size: 40px; }
     .weather-stats { display: flex; gap: 24px; padding-top: 14px; border-top: 1px solid rgba(53,111,105,.16); color: #547571; font-size: 11px; }
     .weather-stats strong { display: block; margin-top: 3px; color: var(--ink); }
     @media (max-width: 1050px) { .stats { grid-template-columns: repeat(3, 1fr); } .welcome { grid-column: 1 / -1; } }
-    @media (max-width: 800px) { .layout { display: block; } aside { padding: 17px; } .logo { padding-bottom: 17px; } .section-label, .season { display: none; } nav { display: flex; overflow-x: auto; } nav button { white-space: nowrap; } main { padding: 25px 18px 40px; } .columns { grid-template-columns: 1fr; } }
+    @media (max-width: 800px) { .layout { display: block; } aside { padding: 17px; box-shadow: 0 5px 20px rgba(18,59,42,.12); } .logo { padding-bottom: 17px; } .section-label, .season { display: none; } nav { display: flex; overflow-x: auto; padding-bottom: 2px; } nav button { white-space: nowrap; } main { padding: 29px 18px 40px; } .columns { grid-template-columns: 1fr; } }
     @media (max-width: 560px) { header { align-items: flex-start; flex-direction: column; } .search { width: 100%; } .header-actions { width: 100%; } .stats { grid-template-columns: 1fr 1fr; } .welcome { grid-column: 1 / -1; } .field { grid-template-columns: 42px 1fr auto; gap: 10px; } .crop-image { width: 42px; height: 42px; } .health { grid-column: 2; } .yield { grid-column: 3; grid-row: 1 / span 2; } }
   </style>
 </head>
