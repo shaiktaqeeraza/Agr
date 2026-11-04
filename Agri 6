@@ -22,6 +22,8 @@
 		.nav-links { display:flex; gap:30px; color:var(--muted); font-size:14px; }
 		.nav-links a:first-child { color:var(--ink); font-weight:700; }
 		.nav-action { display:flex; align-items:center; gap:12px; }
+		.notice { display:flex; align-items:center; justify-content:center; gap:8px; min-height:38px; color:var(--leaf); background:var(--lime); font-size:12px; font-weight:600; letter-spacing:.01em; }
+		.notice strong { color:var(--ink); font-size:10px; letter-spacing:.14em; }
 		.avatar { width:34px; height:34px; border-radius:50%; display:grid; place-items:center; color:white; background:var(--terra); font-size:12px; font-weight:700; }
 		.icon-btn { border:0; background:transparent; color:var(--muted); cursor:pointer; padding:7px; }
 		.hero { padding:72px 0 62px; display:grid; grid-template-columns:1fr 1.08fr; gap:72px; align-items:center; }
@@ -53,6 +55,7 @@
 		.listing:hover { transform:translateY(-3px); box-shadow:0 12px 28px rgba(38,58,39,.09); }
 		.listing-photo { height:178px; position:relative; background-size:cover; background-position:center; }
 		.tag { position:absolute; top:12px; left:12px; padding:5px 9px; border-radius:5px; color:var(--leaf); background:rgba(255,254,250,.9); font-size:11px; font-weight:700; }
+		.listing:first-child .tag:after { content:' · NEW'; color:var(--terra); }
 		.listing-body { padding:17px; }
 		.listing-body h3 { font-size:22px; letter-spacing:-.03em; }
 		.farm { color:var(--muted); font-size:12px; margin-top:6px; }
@@ -89,6 +92,7 @@
 		<nav class="nav-links" aria-label="Main navigation"><a href="#market">Marketplace</a><a href="#insights">Farm insights</a><a href="#join">Community</a></nav>
 		<div class="nav-action"><button class="icon-btn" aria-label="Notifications">◌</button><div class="avatar">AK</div><a class="button button-primary" href="#join">List harvest</a></div>
 	</header>
+	<div class="notice"><strong>NEW SEASON</strong><span>Early harvests are now arriving from farms near you</span><span aria-hidden="true">↗</span></div>
 
 	<main id="top">
 		<section class="shell hero">
