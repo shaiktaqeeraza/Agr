@@ -2,6 +2,15 @@ import React, { useState, useMemo } from "react";
 
 const FONTS = `
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+* { box-sizing: border-box; }
+button, input { -webkit-tap-highlight-color: transparent; }
+button { transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, border-color 160ms ease; }
+button:active { transform: scale(0.97); }
+.premium-card:hover { box-shadow: 0 18px 38px rgba(31,61,43,0.12) !important; transform: translateY(-2px); }
+.premium-card { transition: transform 220ms ease, box-shadow 220ms ease; }
+.premium-action:hover { box-shadow: 0 8px 16px rgba(31,61,43,0.16); }
+.premium-icon-button:hover { background: rgba(91,107,82,0.1) !important; }
 `;
 
 const COLORS = {
@@ -219,9 +228,11 @@ export default function CropsConnection() {
   function renderPost(p) {
     const soldOut = p.remaining <= 0;
     return (
-      <div key={p.id} style={{ background: COLORS.card, borderRadius: 16, border: `1px solid ${COLORS.line}`, marginBottom: 18, overflow: "hidden" }}>
+      <div key={p.id} className="premium-card" style={{ background: COLORS.card, borderRadius: 20, border: `1px solid ${COLORS.line}`, marginBottom: 20, overflow: "hidden", boxShadow: "0 8px 22px rgba(31,61,43,0.06)" }}>
         <div style={{ display: "flex", alignItems: "center", padding: "14px 14px 10px", gap: 10 }}>
-          <Avatar initials={p.initials} color={p.avatar} />
+          <div style={{ padding: 2, borderRadius: "50%", background: `linear-gradient(135deg, ${COLORS.gold}, ${p.avatar})` }}>
+            <Avatar initials={p.initials} color={p.avatar} size={38} />
+          </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 600, fontSize: 14.5, color: COLORS.ink }}>{p.farmer}</div>
             <div style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 12, color: COLORS.olive }}>
@@ -229,7 +240,7 @@ export default function CropsConnection() {
               {p.location}
             </div>
           </div>
-          <button
+          <button className="premium-action"
             onClick={() => toggleFollow(p.farmer)}
             style={{
               border: `1px solid ${following.has(p.farmer) ? COLORS.line : COLORS.ink}`,
@@ -247,8 +258,13 @@ export default function CropsConnection() {
         </div>
         <div style={{ fontSize: 11, color: COLORS.olive, padding: "0 14px 10px" }}>{p.time}</div>
 
-        <div style={{ position: "relative", height: 170, background: p.imgTint, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <span style={{ fontSize: 64 }}>{p.emoji}</span>
+        <div style={{ position: "relative", height: 184, background: `linear-gradient(145deg, ${p.imgTint}, ${COLORS.ink})`, display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+          <div style={{ position: "absolute", width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.18)", transform: "translate(45px, -20px)" }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.28))" }} />
+          <span style={{ position: "relative", fontSize: 72, filter: "drop-shadow(0 8px 10px rgba(0,0,0,0.2))" }}>{p.emoji}</span>
+          <span style={{ position: "absolute", left: 14, bottom: 12, color: "#fff", fontSize: 11, letterSpacing: 1.4, textTransform: "uppercase", fontFamily: "'IBM Plex Mono', monospace", opacity: 0.9 }}>
+            Fresh harvest
+          </span>
           {soldOut && (
             <div style={{
               position: "absolute", top: 18, right: -34, transform: "rotate(35deg)",
@@ -277,19 +293,19 @@ export default function CropsConnection() {
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 14px 14px" }}>
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => setAnalyzerFor(p.id)} style={btnGhost}>Analyzer</button>
+            <button className="premium-action" onClick={() => setAnalyzerFor(p.id)} style={btnGhost}>Analyzer</button>
             {!soldOut ? (
-              <button onClick={() => setSellFor(p.id)} style={btnGhost}>Mark sold</button>
+              <button className="premium-action" onClick={() => setSellFor(p.id)} style={btnGhost}>Mark sold</button>
             ) : (
               <span style={{ ...btnGhost, color: COLORS.clay, borderColor: COLORS.clay, cursor: "default" }}>Sold</span>
             )}
-            <button onClick={() => setChatWith(p.farmer)} style={btnPrimary}>Message</button>
+            <button className="premium-action" onClick={() => setChatWith(p.farmer)} style={btnPrimary}>Message</button>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={() => toggleSave(p.id)} style={{ background: "none", border: "none", cursor: "pointer" }}>
+            <button className="premium-icon-button" aria-label={`Save ${p.crop}`} onClick={() => toggleSave(p.id)} style={{ background: "none", border: "none", borderRadius: 10, cursor: "pointer", padding: 7 }}>
               <Icon name="bookmark" size={18} color={saved.has(p.id) ? COLORS.gold : COLORS.olive} />
             </button>
-            <button onClick={() => showToast("Link copied.")} style={{ background: "none", border: "none", cursor: "pointer" }}>
+            <button className="premium-icon-button" aria-label={`Share ${p.crop}`} onClick={() => showToast("Link copied.")} style={{ background: "none", border: "none", borderRadius: 10, cursor: "pointer", padding: 7 }}>
               <Icon name="share" size={18} color={COLORS.olive} />
             </button>
           </div>
@@ -299,13 +315,15 @@ export default function CropsConnection() {
   }
 
   return (
-    <div style={{ fontFamily: "'IBM Plex Sans', sans-serif", background: COLORS.bg, minHeight: "100%", display: "flex", justifyContent: "center", padding: "20px 0" }}>
+    <div style={{ fontFamily: "'IBM Plex Sans', sans-serif", background: "radial-gradient(circle at 50% -10%, #ffffff 0, #EFF3EA 38%, #E6EDE2 100%)", minHeight: "100%", display: "flex", justifyContent: "center", padding: "18px 12px 32px" }}>
       <style>{FONTS}</style>
-      <div style={{ width: "100%", maxWidth: 460, background: COLORS.bg }}>
-        <div style={{ position: "sticky", top: 0, background: COLORS.bg, paddingBottom: 12, zIndex: 5 }}>
+      <div style={{ width: "100%", maxWidth: 460, background: "transparent" }}>
+        <div style={{ position: "sticky", top: 0, background: "rgba(239,243,234,0.9)", backdropFilter: "blur(16px)", padding: "4px 4px 12px", zIndex: 5 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "4px 4px 14px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <Icon name="leaf" color={COLORS.ink} size={22} />
+              <div style={{ width: 34, height: 34, borderRadius: 12, background: COLORS.ink, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 6px 14px rgba(31,61,43,0.18)" }}>
+                <Icon name="leaf" color="#F6F1DF" size={19} />
+              </div>
               <span style={{ fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 22, color: COLORS.ink }}>
                 CropsConnection
               </span>
@@ -316,7 +334,7 @@ export default function CropsConnection() {
                 style={{ background: "none", border: "none", cursor: "pointer", padding: 6 }}
                 aria-label="Notifications"
               >
-                <Icon name="bell" size={22} />
+                <Icon name="bell" size={21} />
               </button>
               {notifOpen && (
                 <div style={{ position: "absolute", right: 0, top: 36, width: 240, background: COLORS.card, borderRadius: 10, boxShadow: "0 8px 24px rgba(31,61,43,0.18)", padding: 10, zIndex: 10 }}>
@@ -330,7 +348,7 @@ export default function CropsConnection() {
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 20, padding: "0 4px 14px", borderBottom: `1px solid ${COLORS.line}` }}>
+          <div style={{ display: "flex", gap: 20, padding: "0 4px 14px", borderBottom: `1px solid ${COLORS.line}`, overflowX: "auto" }}>
             {TABS.map((t) => (
               <button
                 key={t}
@@ -355,7 +373,11 @@ export default function CropsConnection() {
 
         {tab === "Feed" && (
           <div style={{ padding: "0 4px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, background: COLORS.card, borderRadius: 24, padding: "10px 14px", marginBottom: 16, border: `1px solid ${COLORS.line}` }}>
+            <div style={{ padding: "10px 2px 14px" }}>
+              <div style={{ fontFamily: "'Fraunces', serif", color: COLORS.ink, fontSize: 25, fontWeight: 600, lineHeight: 1.1 }}>Good harvests,<br /><span style={{ color: COLORS.gold }}>better connections.</span></div>
+              <div style={{ color: COLORS.olive, fontSize: 12.5, marginTop: 7 }}>Discover fresh produce from farmers near you.</div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.86)", borderRadius: 14, padding: "12px 14px", marginBottom: 18, border: `1px solid ${COLORS.line}`, boxShadow: "0 6px 18px rgba(31,61,43,0.05)" }}>
               <Icon name="search" size={17} color={COLORS.olive} />
               <input
                 value={query}
