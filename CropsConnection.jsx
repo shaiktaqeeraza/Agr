@@ -11,6 +11,9 @@ button:active { transform: scale(0.97); }
 .premium-card { transition: transform 220ms ease, box-shadow 220ms ease; }
 .premium-action:hover { box-shadow: 0 8px 16px rgba(31,61,43,0.16); }
 .premium-icon-button:hover { background: rgba(91,107,82,0.1) !important; }
+.market-pulse { background: linear-gradient(135deg, #1F3D2B 0%, #315B3E 72%, #5B6B52 100%); }
+.market-pulse::after { content: ""; position: absolute; width: 140px; height: 140px; right: -44px; top: -58px; border: 1px solid rgba(255,255,255,0.16); border-radius: 50%; box-shadow: 0 0 0 20px rgba(255,255,255,0.04), 0 0 0 40px rgba(255,255,255,0.03); }
+.pulse-stat { border-left: 1px solid rgba(255,255,255,0.2); padding-left: 12px; }
 `;
 
 const COLORS = {
@@ -385,6 +388,30 @@ export default function CropsConnection() {
                 placeholder="Search crop name or location"
                 style={{ border: "none", outline: "none", background: "none", fontSize: 13.5, flex: 1, fontFamily: "'IBM Plex Sans', sans-serif", color: COLORS.ink }}
               />
+            </div>
+
+            <div className="market-pulse" style={{ position: "relative", overflow: "hidden", borderRadius: 18, padding: "16px 18px", marginBottom: 20, color: "#fff", boxShadow: "0 12px 24px rgba(31,61,43,0.16)" }}>
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
+                  <span style={{ width: 7, height: 7, borderRadius: "50%", background: "#D9B34B", boxShadow: "0 0 0 4px rgba(217,179,75,0.18)" }} />
+                  <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 10, letterSpacing: 1.4, textTransform: "uppercase", opacity: 0.78 }}>Market pulse · today</span>
+                </div>
+                <div style={{ fontFamily: "'Fraunces', serif", fontSize: 20, lineHeight: 1.15, maxWidth: 250 }}>Fresh picks are moving fast.</div>
+                <div style={{ display: "flex", gap: 20, marginTop: 14 }}>
+                  <div>
+                    <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600 }}>{posts.length}</div>
+                    <div style={{ fontSize: 11, opacity: 0.7 }}>active listings</div>
+                  </div>
+                  <div className="pulse-stat">
+                    <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600 }}>3</div>
+                    <div style={{ fontSize: 11, opacity: 0.7 }}>nearby growers</div>
+                  </div>
+                  <div className="pulse-stat">
+                    <div style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: 17, fontWeight: 600 }}>24h</div>
+                    <div style={{ fontSize: 11, opacity: 0.7 }}>freshness window</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {filtered.length === 0 && (
