@@ -38,6 +38,7 @@
   a{color:inherit;}
   .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
   @media (max-width:640px){ .wrap{padding:0 20px;} }
+  :focus-visible{outline:3px solid var(--gold); outline-offset:3px;}
 
   /* NAV */
   nav{
@@ -53,6 +54,11 @@
   nav .links{display:flex; gap:32px; font-size:15px; font-weight:500;}
   nav .links a{text-decoration:none; opacity:0.8; transition:opacity .15s;}
   nav .links a:hover{opacity:1;}
+  @media (max-width:640px){
+    nav .wrap{height:auto; min-height:72px; padding-top:14px; padding-bottom:14px; flex-wrap:wrap;}
+    nav .links{order:3; width:100%; justify-content:space-between; gap:12px; padding-top:12px; font-size:13px;}
+    nav .btn{padding:9px 14px; font-size:13px;}
+  }
   .btn{
     display:inline-flex; align-items:center; justify-content:center;
     padding:11px 22px; border-radius:4px; font-weight:600; font-size:14.5px;
@@ -80,6 +86,7 @@
   .stat-panel .row:last-child{border-bottom:none;}
   .stat-panel .num{font-family:'Fraunces', serif; font-size:26px; color:var(--gold);}
   .stat-panel .label{font-size:14px; opacity:0.75; max-width:18ch;}
+  .stat-panel .pulse-note{margin-top:18px; font-size:12px; color:var(--paper); opacity:0.62;}
 
   /* SECTION HEADS */
   .section{padding:80px 0; border-bottom:1px solid var(--line);}
@@ -106,6 +113,8 @@
   }
   .card:hover{transform:translateY(-5px); box-shadow:0 18px 34px rgba(36,48,31,0.13);}
   .card .swatch{height:110px; border-radius:10px; background:linear-gradient(135deg,var(--moss),#8FA876);}
+  .card .swatch{position:relative; overflow:hidden;}
+  .card .swatch::after{content:""; position:absolute; inset:0; background:linear-gradient(125deg, transparent 35%, rgba(255,255,255,0.2) 36%, transparent 58%); transform:translateX(-35%);}
   .card:nth-child(3n+2) .swatch{background:linear-gradient(135deg,#C88B2E,#E2B95B);}
   .card:nth-child(3n) .swatch{background:linear-gradient(135deg,#7C5A83,#B18AB5);}
   .card .tag{font-size:12.5px; font-weight:700; letter-spacing:0.02em; color:var(--moss-dark);}
@@ -179,6 +188,7 @@
       <div class="row"><span class="label">Farms listing produce</span><span class="num">1,240</span></div>
       <div class="row"><span class="label">Avg. price above wholesale for sellers</span><span class="num">+18%</span></div>
       <div class="row"><span class="label">Time from listing to first offer</span><span class="num">36 hrs</span></div>
+      <div class="pulse-note">Updated today · Inventory reflects active farm listings</div>
     </div>
   </div>
 </section>
