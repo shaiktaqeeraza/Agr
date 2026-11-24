@@ -22,9 +22,9 @@
   body{
     margin:0;
     background:
-      radial-gradient(circle at 8% 0%, rgba(200,139,46,0.12), transparent 28rem),
-      radial-gradient(circle at 92% 18%, rgba(91,122,79,0.16), transparent 30rem),
-      var(--paper);
+      radial-gradient(circle at 8% 0%, rgba(200,139,46,0.10), transparent 30rem),
+      radial-gradient(circle at 92% 24%, rgba(91,122,79,0.12), transparent 34rem),
+      linear-gradient(180deg,#F7F4EB 0%,var(--paper) 48%,#F5F1E6 100%);
     color:var(--soil);
     font-family:'Public Sans', sans-serif;
     line-height:1.5;
@@ -43,7 +43,7 @@
   /* NAV */
   nav{
     position:sticky; top:0; z-index:50;
-    background:rgba(241,237,224,0.78);
+    background:rgba(250,248,241,0.86);
     backdrop-filter: blur(16px);
     border-bottom:1px solid var(--line);
   }
@@ -72,24 +72,33 @@
   .btn-ghost:hover{background:var(--soil); color:var(--paper);}
 
   /* HERO */
-  .hero{padding:96px 0 64px; border-bottom:1px solid var(--line); position:relative; overflow:hidden;}
-  .hero::after{content:""; position:absolute; width:420px; height:420px; border:1px solid rgba(91,122,79,0.13); border-radius:50%; right:-180px; top:-230px; box-shadow:0 0 0 28px rgba(91,122,79,0.04), 0 0 0 56px rgba(91,122,79,0.03); pointer-events:none;}
+  .hero{padding:96px 0 72px; border-bottom:1px solid rgba(241,237,224,0.12); position:relative; overflow:hidden; background:radial-gradient(ellipse at 82% 18%,rgba(200,139,46,0.18),transparent 25rem),linear-gradient(120deg,#1D2B20 0%,#304834 55%,#263C2D 100%); color:var(--paper);}
+  .hero::after{content:""; position:absolute; width:420px; height:420px; border:1px solid rgba(241,237,224,0.16); border-radius:50%; right:-180px; top:-230px; box-shadow:0 0 0 28px rgba(241,237,224,0.035), 0 0 0 56px rgba(241,237,224,0.025); pointer-events:none;}
+  .hero .wrap{position:relative; z-index:1;}
+  .hero .eyebrow{color:#E8C27B;}
+  .hero h1{color:#FFFDF8;}
+  .hero p.lede{color:rgba(255,253,248,0.78);}
+  .hero .btn-primary{background:linear-gradient(135deg,#D8AD61,#C88B2E); color:var(--soil); box-shadow:0 10px 24px rgba(0,0,0,0.2);}
+  .hero .btn-primary:hover{background:linear-gradient(135deg,#E8C27B,#D8AD61);}
+  .hero .btn-ghost{border-color:rgba(255,253,248,0.7); color:var(--white);}
+  .hero .btn-ghost:hover{background:var(--white); color:var(--soil);}
   .hero .grid{display:grid; grid-template-columns: 1.15fr 0.85fr; gap:56px; align-items:end;}
   @media (max-width:860px){ .hero .grid{grid-template-columns:1fr;} }
   .eyebrow{font-size:14.5px; color:var(--moss-dark); font-weight:600; margin-bottom:18px;}
   .hero h1{font-size:clamp(38px, 6vw, 64px); letter-spacing:-0.01em; max-width:12ch;}
   .hero p.lede{font-size:19px; max-width:46ch; margin-top:22px; opacity:0.85;}
   .hero .cta-row{display:flex; gap:14px; margin-top:32px; flex-wrap:wrap;}
-  .stat-panel{background:linear-gradient(145deg,var(--soil),#3F5A38); color:var(--paper); border-radius:14px; padding:32px; box-shadow:0 20px 38px rgba(36,48,31,0.18); position:relative; overflow:hidden;}
-  .stat-panel::before{content:"MARKET PULSE"; display:block; font-size:11px; letter-spacing:0.16em; color:var(--gold); margin-bottom:8px; font-weight:700;}
-  .stat-panel .row{display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(241,237,224,0.16);}
+  .stat-panel{background:rgba(255,253,248,0.96); color:var(--soil); border:1px solid rgba(255,255,255,0.44); border-radius:16px; padding:32px; box-shadow:0 24px 55px rgba(0,0,0,0.2); position:relative; overflow:hidden;}
+  .stat-panel::before{content:"MARKET PULSE"; display:block; font-size:11px; letter-spacing:0.16em; color:var(--moss-dark); margin-bottom:8px; font-weight:700;}
+  .stat-panel .row{display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line);}
   .stat-panel .row:last-child{border-bottom:none;}
-  .stat-panel .num{font-family:'Fraunces', serif; font-size:26px; color:var(--gold);}
+  .stat-panel .num{font-family:'Fraunces', serif; font-size:26px; color:var(--moss-dark);}
   .stat-panel .label{font-size:14px; opacity:0.75; max-width:18ch;}
-  .stat-panel .pulse-note{margin-top:18px; font-size:12px; color:var(--paper); opacity:0.62;}
+  .stat-panel .pulse-note{margin-top:18px; font-size:12px; color:var(--soil); opacity:0.62;}
 
   /* SECTION HEADS */
   .section{padding:80px 0; border-bottom:1px solid var(--line);}
+  #market{background:rgba(255,253,248,0.38);}
   .section-head{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:40px; flex-wrap:wrap;}
   .section-head h2{font-size:clamp(28px, 4vw, 38px); max-width:16ch;}
   .section-head p{max-width:40ch; opacity:0.75; font-size:15.5px;}
@@ -115,13 +124,16 @@
   .card .swatch{height:110px; border-radius:10px; background:linear-gradient(135deg,var(--moss),#8FA876);}
   .card .swatch{position:relative; overflow:hidden;}
   .card .swatch::after{content:""; position:absolute; inset:0; background:linear-gradient(125deg, transparent 35%, rgba(255,255,255,0.2) 36%, transparent 58%); transform:translateX(-35%);}
-  .card:nth-child(3n+2) .swatch{background:linear-gradient(135deg,#C88B2E,#E2B95B);}
-  .card:nth-child(3n) .swatch{background:linear-gradient(135deg,#7C5A83,#B18AB5);}
+  .card:nth-child(3n+2) .swatch{background:linear-gradient(135deg,#A66B2D,#D5A653);}
+  .card:nth-child(3n) .swatch{background:linear-gradient(135deg,#536B45,#9AA879);}
   .card .tag{font-size:12.5px; font-weight:700; letter-spacing:0.02em; color:var(--moss-dark);}
   .card h3{font-size:19px;}
   .card .meta{display:flex; justify-content:space-between; align-items:baseline; font-size:14px; opacity:0.75; margin-top:auto;}
   .card .price{font-family:'Fraunces', serif; font-size:18px; color:var(--soil); opacity:1; font-weight:600;}
   .card .farm{font-size:13.5px; opacity:0.65; margin-top:-4px;}
+  .card .meta{gap:12px; flex-wrap:wrap;}
+  .card-action{display:inline-flex; align-items:center; justify-content:center; padding:8px 13px; border-radius:4px; background:var(--moss-dark); color:var(--white); font-size:12.5px; font-weight:700; text-decoration:none; transition:background .15s,transform .15s;}
+  .card-action:hover{background:var(--soil); transform:translateY(-1px);}
 
   /* HOW IT WORKS */
   .how-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:48px;}
@@ -279,7 +291,7 @@
           <div class="tag">${l.tag}</div>
           <h3>${l.name}</h3>
           <div class="farm">${l.farm}</div>
-          <div class="meta"><span class="price">${l.price}</span><span>Message farm</span></div>
+          <div class="meta"><span class="price">${l.price}</span><a class="card-action" href="#join" aria-label="Contact ${l.farm}">Contact farm</a></div>
         `;
         grid.appendChild(card);
       });
