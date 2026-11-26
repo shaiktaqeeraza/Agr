@@ -105,6 +105,14 @@
 
   /* MARKETPLACE */
   .filters{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:28px;}
+  .market-tools{display:grid; grid-template-columns:minmax(0,1fr) 220px; gap:14px; margin-bottom:20px;}
+  .market-tools label{display:block; font-size:13px; font-weight:600; margin-bottom:6px;}
+  .market-tools input,.market-tools select{
+    width:100%; min-height:44px; padding:10px 12px; border:1px solid var(--line); border-radius:6px;
+    background:var(--white); color:var(--soil); font:inherit;
+  }
+  .results-count{margin:0 0 16px; font-size:13.5px; opacity:.72;}
+  @media (max-width:560px){ .market-tools{grid-template-columns:1fr;} }
   .chip{
     padding:8px 16px; border:1px solid var(--soil); border-radius:100px;
     font-size:14px; font-weight:600; cursor:pointer; background:transparent;
@@ -134,6 +142,7 @@
   .card .meta{gap:12px; flex-wrap:wrap;}
   .card-action{display:inline-flex; align-items:center; justify-content:center; padding:8px 13px; border-radius:4px; background:var(--moss-dark); color:var(--white); font-size:12.5px; font-weight:700; text-decoration:none; transition:background .15s,transform .15s;}
   .card-action:hover{background:var(--soil); transform:translateY(-1px);}
+  .empty-state{grid-column:1/-1; padding:32px; border:1px dashed var(--line); border-radius:12px; text-align:center; opacity:.75;}
 
   /* HOW IT WORKS */
   .how-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:48px;}
@@ -159,6 +168,7 @@
     cursor:pointer; font-size:14px;
   }
   .role-toggle button.active{background:var(--gold); color:var(--soil); border-color:var(--gold);}
+  .role-toggle button:hover:not(.active){border-color:var(--gold);}
   .field{margin-bottom:16px;}
   .field label{display:block; font-size:13px; opacity:0.7; margin-bottom:6px;}
   .field input, .field select{
@@ -167,6 +177,7 @@
   }
   .field input::placeholder{color:rgba(241,237,224,0.4);}
   .form-note{font-size:13px; opacity:0.6; margin-top:14px;}
+  .form-status{min-height:22px; margin:12px 0 0; font-size:13px; color:#E8C27B;}
 
   footer{padding:40px 0; font-size:13.5px; opacity:0.6; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;}
 </style>
@@ -212,12 +223,28 @@
       <p>A sample of current inventory. Real listings update daily as farms post fresh stock and pricing.</p>
     </div>
     <div class="filters" id="filters">
-      <button class="chip active" data-filter="all">All</button>
-      <button class="chip" data-filter="grain">Grain</button>
-      <button class="chip" data-filter="produce">Produce</button>
-      <button class="chip" data-filter="orchard">Orchard</button>
-      <button class="chip" data-filter="dairy">Dairy & eggs</button>
+      <button class="chip active" type="button" data-filter="all" aria-pressed="true">All</button>
+      <button class="chip" type="button" data-filter="grain" aria-pressed="false">Grain</button>
+      <button class="chip" type="button" data-filter="produce" aria-pressed="false">Produce</button>
+      <button class="chip" type="button" data-filter="orchard" aria-pressed="false">Orchard</button>
+      <button class="chip" type="button" data-filter="dairy" aria-pressed="false">Dairy & eggs</button>
     </div>
+    <div class="market-tools">
+      <div>
+        <label for="listing-search">Search crops, categories, or farms</label>
+        <input id="listing-search" type="search" placeholder="Try “tomatoes” or “Ohio”">
+      </div>
+      <div>
+        <label for="listing-sort">Sort listings</label>
+        <select id="listing-sort">
+          <option value="featured">Featured</option>
+          <option value="name-asc">Name: A to Z</option>
+          <option value="name-desc">Name: Z to A</option>
+          <option value="category">Category</option>
+        </select>
+      </div>
+    </div>
+    <p class="results-count" id="results-count" aria-live="polite"></p>
     <div class="listings" id="listings"></div>
   </div>
 </section>
@@ -246,16 +273,19 @@
       <p>Farmers list inventory for free. Buyers browse and message farms at no cost — CropConnection takes a small fee only on completed orders.</p>
     </div>
     <div class="form-card">
-      <div class="role-toggle">
-        <button type="button" class="active" data-role="farmer">I'm a farmer</button>
-        <button type="button" data-role="buyer">I'm a buyer</button>
+      <div class="role-toggle" role="group" aria-label="Choose your account type">
+        <button type="button" class="active" data-role="farmer" aria-pressed="true">I'm a farmer</button>
+        <button type="button" data-role="buyer" aria-pressed="false">I'm a buyer</button>
       </div>
-      <div class="field"><label>Full name</label><input type="text" placeholder="Jordan Reyes"></div>
-      <div class="field"><label id="org-label">Farm name</label><input type="text" id="org-input" placeholder="Reyes Family Farm"></div>
-      <div class="field"><label>Email</label><input type="email" placeholder="you@example.com"></div>
-      <div class="field"><label>Region</label><input type="text" placeholder="City, state"></div>
-      <a href="#" class="btn btn-primary" style="width:100%;">Create account</a>
-      <p class="form-note">This is a demo page — no account is actually created.</p>
+      <form id="signup-form">
+        <div class="field"><label for="full-name">Full name</label><input id="full-name" name="name" type="text" placeholder="Jordan Reyes" autocomplete="name" required></div>
+        <div class="field"><label id="org-label" for="org-input">Farm name</label><input id="org-input" name="organization" type="text" placeholder="Reyes Family Farm" required></div>
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required></div>
+        <div class="field"><label for="region">Region</label><input id="region" name="region" type="text" placeholder="City, state" autocomplete="address-level2" required></div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Create account</button>
+        <p class="form-note">Demo only — your details are not sent and no account is created.</p>
+        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
     </div>
   </div>
 </section>
@@ -279,11 +309,25 @@
   ];
 
   const grid = document.getElementById('listings');
-  function render(filter){
+  const searchInput = document.getElementById('listing-search');
+  const sortSelect = document.getElementById('listing-sort');
+  const resultsCount = document.getElementById('results-count');
+  let activeFilter = 'all';
+  function render(){
     grid.innerHTML = '';
-    listings
-      .filter(l => filter === 'all' || l.cat === filter)
-      .forEach(l => {
+    const query = searchInput.value.trim().toLowerCase();
+    const filtered = listings
+      .filter(l => (activeFilter === 'all' || l.cat === activeFilter) &&
+        `${l.name} ${l.tag} ${l.farm}`.toLowerCase().includes(query));
+    if(sortSelect.value === 'name-asc') filtered.sort((a, b) => a.name.localeCompare(b.name));
+    if(sortSelect.value === 'name-desc') filtered.sort((a, b) => b.name.localeCompare(a.name));
+    if(sortSelect.value === 'category') filtered.sort((a, b) => a.tag.localeCompare(b.tag) || a.name.localeCompare(b.name));
+    resultsCount.textContent = `${filtered.length} ${filtered.length === 1 ? 'listing' : 'listings'} found`;
+    if(filtered.length === 0){
+      grid.innerHTML = '<p class="empty-state">No listings match your search. Try another crop or category.</p>';
+      return;
+    }
+    filtered.forEach(l => {
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
@@ -296,23 +340,39 @@
         grid.appendChild(card);
       });
   }
-  render('all');
+  render();
 
   document.getElementById('filters').addEventListener('click', e => {
-    if(e.target.tagName !== 'BUTTON') return;
-    document.querySelectorAll('#filters .chip').forEach(c => c.classList.remove('active'));
-    e.target.classList.add('active');
-    render(e.target.dataset.filter);
+    const button = e.target.closest('button[data-filter]');
+    if(!button) return;
+    activeFilter = button.dataset.filter;
+    document.querySelectorAll('#filters .chip').forEach(c => {
+      c.classList.remove('active');
+      c.setAttribute('aria-pressed', 'false');
+    });
+    button.classList.add('active');
+    button.setAttribute('aria-pressed', 'true');
+    render();
   });
+  searchInput.addEventListener('input', render);
+  sortSelect.addEventListener('change', render);
 
   document.querySelectorAll('.role-toggle button').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.role-toggle button').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.role-toggle button').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
       const isFarmer = btn.dataset.role === 'farmer';
       document.getElementById('org-label').textContent = isFarmer ? 'Farm name' : 'Business name';
       document.getElementById('org-input').placeholder = isFarmer ? 'Reyes Family Farm' : 'Green Table Grocery';
     });
+  });
+  document.getElementById('signup-form').addEventListener('submit', event => {
+    event.preventDefault();
+    document.getElementById('form-status').textContent = 'Thanks for your interest! Account creation is not available in this demo yet.';
   });
 </script>
 
