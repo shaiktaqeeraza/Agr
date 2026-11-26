@@ -39,6 +39,20 @@
   .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
   @media (max-width:640px){ .wrap{padding:0 20px;} }
   :focus-visible{outline:3px solid var(--gold); outline-offset:3px;}
+  body[data-theme="dark"]{
+    --soil:#DDE6D7;
+    --paper:#222B24;
+    --paper-dim:#303B32;
+    --moss:#829B72;
+    --moss-dark:#A7C196;
+    --gold:#E2B968;
+    --line:rgba(221,230,215,0.2);
+    --white:#303B32;
+    background:
+      radial-gradient(circle at 8% 0%, rgba(200,139,46,0.08), transparent 30rem),
+      radial-gradient(circle at 92% 24%, rgba(91,122,79,0.1), transparent 34rem),
+      linear-gradient(180deg,#29332B 0%,var(--paper) 48%,#252E27 100%);
+  }
 
   /* NAV */
   nav{
@@ -47,7 +61,15 @@
     backdrop-filter: blur(16px);
     border-bottom:1px solid var(--line);
   }
+  body[data-theme="dark"] nav{background:rgba(34,43,36,0.9);}
   nav .wrap{display:flex; align-items:center; justify-content:space-between; height:72px;}
+  .nav-actions{display:flex; align-items:center; gap:10px;}
+  .theme-toggle{
+    min-height:42px; padding:9px 13px; border:1px solid var(--line); border-radius:4px;
+    background:var(--white); color:var(--soil); font:600 13px 'Public Sans',sans-serif;
+    cursor:pointer; transition:background .15s ease, color .15s ease;
+  }
+  .theme-toggle:hover{background:var(--paper-dim);}
   .brand{display:flex; align-items:center; gap:10px; font-family:'Fraunces', serif; font-weight:600; font-size:20px;}
   .brand .mark{width:22px; height:22px; border-radius:7px; background:var(--moss-dark); position:relative; flex:none; box-shadow:0 5px 12px rgba(63,90,56,0.22);}
   .brand .mark::after{content:""; position:absolute; inset:5px; border-radius:1px; background:var(--gold);}
@@ -58,6 +80,8 @@
     nav .wrap{height:auto; min-height:72px; padding-top:14px; padding-bottom:14px; flex-wrap:wrap;}
     nav .links{order:3; width:100%; justify-content:space-between; gap:12px; padding-top:12px; font-size:13px;}
     nav .btn{padding:9px 14px; font-size:13px;}
+    .nav-actions{margin-left:auto;}
+    .theme-toggle{padding:8px 10px; font-size:12px;}
   }
   .btn{
     display:inline-flex; align-items:center; justify-content:center;
@@ -99,6 +123,7 @@
   /* SECTION HEADS */
   .section{padding:80px 0; border-bottom:1px solid var(--line);}
   #market{background:rgba(255,253,248,0.38);}
+  body[data-theme="dark"] #market{background:rgba(0,0,0,0.08);}
   .section-head{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:40px; flex-wrap:wrap;}
   .section-head h2{font-size:clamp(28px, 4vw, 38px); max-width:16ch;}
   .section-head p{max-width:40ch; opacity:0.75; font-size:15.5px;}
@@ -143,6 +168,23 @@
   .card-action{display:inline-flex; align-items:center; justify-content:center; padding:8px 13px; border-radius:4px; background:var(--moss-dark); color:var(--white); font-size:12.5px; font-weight:700; text-decoration:none; transition:background .15s,transform .15s;}
   .card-action:hover{background:var(--soil); transform:translateY(-1px);}
   .empty-state{grid-column:1/-1; padding:32px; border:1px dashed var(--line); border-radius:12px; text-align:center; opacity:.75;}
+  .card-actions{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .like-action{
+    display:inline-flex; align-items:center; justify-content:center; padding:8px 13px;
+    border:1px solid var(--line); border-radius:4px; background:transparent; color:var(--soil);
+    font:600 12.5px 'Public Sans',sans-serif; cursor:pointer; transition:background .15s,color .15s;
+  }
+  .like-action:hover,.like-action[aria-pressed="true"]{background:var(--gold); border-color:var(--gold); color:#24301F;}
+
+  /* CLIMATE RESILIENCE */
+  .climate-section{background:rgba(91,122,79,0.08);}
+  .climate-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .climate-card{padding:24px; border:1px solid var(--line); border-radius:12px; background:var(--white);}
+  .climate-card .climate-label{font-size:12px; font-weight:700; letter-spacing:.08em; color:var(--moss-dark); text-transform:uppercase;}
+  .climate-card h3{margin:12px 0 8px; font-size:21px;}
+  .climate-card p{margin:0; font-size:14px; opacity:.78;}
+  .climate-note{margin:22px 0 0; font-size:13px; opacity:.7;}
+  @media (max-width:760px){.climate-grid{grid-template-columns:1fr;}}
 
   /* HOW IT WORKS */
   .how-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:48px;}
@@ -156,6 +198,12 @@
 
   /* SIGNUP */
   .signup{background:var(--soil); color:var(--paper);}
+  body[data-theme="dark"] .signup{background:#151D17; color:var(--paper);}
+  body[data-theme="dark"] .signup{color:var(--soil);}
+  body[data-theme="dark"] .signup h2,
+  body[data-theme="dark"] .role-toggle button,
+  body[data-theme="dark"] .field input,
+  body[data-theme="dark"] .field select{color:var(--soil);}
   .signup .grid{display:grid; grid-template-columns:1fr 1fr; gap:56px;}
   @media (max-width:860px){ .signup .grid{grid-template-columns:1fr;} }
   .signup h2{color:var(--paper); font-size:clamp(26px,4vw,34px); max-width:14ch;}
@@ -182,17 +230,20 @@
   footer{padding:40px 0; font-size:13.5px; opacity:0.6; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;}
 </style>
 </head>
-<body>
-
+<body data-theme="light">
 <nav>
   <div class="wrap">
     <div class="brand"><span class="mark"></span>CropConnection</div>
     <div class="links">
       <a href="#market">Marketplace</a>
+      <a href="#climate">Climate</a>
       <a href="#how">How it works</a>
       <a href="#join">Join</a>
     </div>
-    <a href="#join" class="btn btn-primary">Get started</a>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-pressed="false">Dark background</button>
+      <a href="#join" class="btn btn-primary">Get started</a>
+    </div>
   </div>
 </nav>
 
@@ -246,6 +297,33 @@
     </div>
     <p class="results-count" id="results-count" aria-live="polite"></p>
     <div class="listings" id="listings"></div>
+  </div>
+</section>
+
+<section class="section climate-section" id="climate">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Grow resilient through a changing climate</h2>
+      <p>Weather shifts can affect harvest timing, crop quality, and supply. Small, locally informed changes can help farms prepare.</p>
+    </div>
+    <div class="climate-grid">
+      <article class="climate-card">
+        <div class="climate-label">Heat stress</div>
+        <h3>Protect crops from heat</h3>
+        <p>Consider heat-tolerant varieties, shade where appropriate, and adjusting work or planting schedules around local conditions.</p>
+      </article>
+      <article class="climate-card">
+        <div class="climate-label">Water availability</div>
+        <h3>Use water wisely</h3>
+        <p>Check soil moisture, reduce evaporation with suitable ground cover, and explore efficient irrigation options for your farm.</p>
+      </article>
+      <article class="climate-card">
+        <div class="climate-label">Changing rainfall</div>
+        <h3>Plan for extremes</h3>
+        <p>Follow local forecasts, improve field drainage where needed, and keep a backup plan for delayed planting or harvest.</p>
+      </article>
+    </div>
+    <p class="climate-note">General preparedness ideas only—not a local forecast or a substitute for advice from agricultural extension services.</p>
   </div>
 </section>
 
@@ -313,6 +391,7 @@
   const sortSelect = document.getElementById('listing-sort');
   const resultsCount = document.getElementById('results-count');
   let activeFilter = 'all';
+  const likedListings = new Set();
   function render(){
     grid.innerHTML = '';
     const query = searchInput.value.trim().toLowerCase();
@@ -328,6 +407,8 @@
       return;
     }
     filtered.forEach(l => {
+        const listingIndex = listings.indexOf(l);
+        const isLiked = likedListings.has(listingIndex);
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
@@ -335,12 +416,29 @@
           <div class="tag">${l.tag}</div>
           <h3>${l.name}</h3>
           <div class="farm">${l.farm}</div>
-          <div class="meta"><span class="price">${l.price}</span><a class="card-action" href="#join" aria-label="Contact ${l.farm}">Contact farm</a></div>
+          <div class="meta"><span class="price">${l.price}</span><div class="card-actions"><button class="like-action" type="button" data-listing="${listingIndex}" aria-label="${isLiked ? 'Unlike' : 'Like'} ${l.name}" aria-pressed="${isLiked}">${isLiked ? 'Liked' : 'Like'}</button><a class="card-action" href="#join" aria-label="Contact ${l.farm}">Contact farm</a></div></div>
         `;
         grid.appendChild(card);
       });
   }
   render();
+
+  grid.addEventListener('click', event => {
+    const button = event.target.closest('button[data-listing]');
+    if(!button) return;
+    const listingIndex = Number(button.dataset.listing);
+    if(likedListings.has(listingIndex)) likedListings.delete(listingIndex);
+    else likedListings.add(listingIndex);
+    render();
+  });
+
+  const themeToggle = document.getElementById('theme-toggle');
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.body.dataset.theme !== 'dark';
+    document.body.dataset.theme = isDark ? 'dark' : 'light';
+    themeToggle.textContent = isDark ? 'Light background' : 'Dark background';
+    themeToggle.setAttribute('aria-pressed', String(isDark));
+  });
 
   document.getElementById('filters').addEventListener('click', e => {
     const button = e.target.closest('button[data-filter]');
